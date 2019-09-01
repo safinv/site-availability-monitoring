@@ -1,0 +1,25 @@
+﻿@model List<Domain.Models.UrlModel>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+</div>
+
+<table class="table">
+    <tr>
+        <th>Url</th>
+        <th>Доступность</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Url)</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsAvailable)
+            </td>
+        </tr>
+    }
+</table>

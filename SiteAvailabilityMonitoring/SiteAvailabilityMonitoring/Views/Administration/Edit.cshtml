@@ -1,0 +1,32 @@
+﻿@model Domain.Models.UrlModel
+@{
+    ViewData["Title"] = "Administration Page";
+}
+
+<h2>Edit url</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div>
+
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Id)
+
+        <div>
+            @Html.LabelFor(model => model.Url)
+            <div>
+                @Html.EditorFor(model => model.Url)
+                @Html.ValidationMessageFor(model => model.Url)
+            </div>
+        </div>
+        <br/>
+        <div>
+            <input type="submit" value="Save" />
+        </div>
+    </div>
+}
+<div>
+    @Html.ActionLink("Go Back", "Index")
+</div>
