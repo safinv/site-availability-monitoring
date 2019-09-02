@@ -21,7 +21,12 @@ namespace SiteAvailabilityMonitoring.Infrastructure.Services
             {
                 using (var response = await _httpClient.GetAsync(url))
                 {
-                    return true;
+                    if(response.IsSuccessStatusCode)
+                    {
+                        return true;
+                    }
+
+                    return false;
                 }
             }
             catch
