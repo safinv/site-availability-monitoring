@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace Domain.Models
+namespace SiteAvailabilityMonitoring.Domain.Models
 {
     public class BaseDbModel
     {

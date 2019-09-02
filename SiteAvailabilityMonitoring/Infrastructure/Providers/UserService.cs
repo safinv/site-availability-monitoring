@@ -1,9 +1,9 @@
-﻿using Domain.Database;
-using Domain.Models;
-using Domain.Settings;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using SiteAvailabilityMonitoring.Domain.Database;
+using SiteAvailabilityMonitoring.Domain.Models;
+using SiteAvailabilityMonitoring.Domain.Settings;
 
-namespace Infrastructure.Providers
+namespace SiteAvailabilityMonitoring.Infrastructure.Providers
 {
     public class UserService : BaseDatabaseService<UserModel>
     {
@@ -18,7 +18,7 @@ namespace Infrastructure.Providers
             var result = await GetAsync(user => user.Login == login && user.Password == password);
             return result;
         }
-        
+
         public async Task<UserModel> TryGetUser(string login)
         {
             var result = await GetAsync(user => user.Login == login);

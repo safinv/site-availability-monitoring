@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Infrastructure.Providers;
+
 using Microsoft.AspNetCore.Mvc;
+
+using SiteAvailabilityMonitoring.Infrastructure.Providers;
 using SiteAvailabilityMonitoring.Models;
 
 namespace SiteAvailabilityMonitoring.Controllers

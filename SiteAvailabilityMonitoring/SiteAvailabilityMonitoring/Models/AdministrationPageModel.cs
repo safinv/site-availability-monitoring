@@ -1,5 +1,6 @@
-﻿using Domain.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
+using SiteAvailabilityMonitoring.Domain.Models;
 
 namespace SiteAvailabilityMonitoring.Models
 {
@@ -11,7 +12,7 @@ namespace SiteAvailabilityMonitoring.Models
             Time = string.Join(":", applicationSettingModel.Hour, applicationSettingModel.Minutes, applicationSettingModel.Seconds);
         }
 
-        public IList<UrlModel> UrlModels { get; } 
+        public IList<UrlModel> UrlModels { get; }
 
         public string Time { get; }
     }

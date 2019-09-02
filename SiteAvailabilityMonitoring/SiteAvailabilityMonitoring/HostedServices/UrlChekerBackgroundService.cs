@@ -1,11 +1,13 @@
-﻿using Domain.Models;
-using Infrastructure.Providers;
-using Infrastructure.Services.Contracts;
-using Microsoft.Extensions.Hosting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+
+using Microsoft.Extensions.Hosting;
+
+using SiteAvailabilityMonitoring.Domain.Models;
+using SiteAvailabilityMonitoring.Infrastructure.Providers;
+using SiteAvailabilityMonitoring.Infrastructure.Services.Contracts;
 
 namespace SiteAvailabilityMonitoring.HostedServices
 {
@@ -26,7 +28,7 @@ namespace SiteAvailabilityMonitoring.HostedServices
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                var time = await _backgroundSettingService.GetBackgroundTimeAsync();                
+                var time = await _backgroundSettingService.GetBackgroundTimeAsync();
                 var span = new TimeSpan(time.Hour, time.Minutes, time.Seconds);
 
                 var urls = await _urlService.GetAllAsync();
@@ -46,11 +48,11 @@ namespace SiteAvailabilityMonitoring.HostedServices
 
         private async Task CheckAsync(IEnumerable<UrlModel> urls)
         {
-            foreach(var url in urls)
+            foreach (var url in urls)
             {
                 var result = await _siteAvailabilityCheker.CheckUrlAsync(url.Url);
 
-                if(url.IsAvailable != result)
+                if (url.IsAvailable != result)
                 {
                     url.IsAvailable = result;
                     await _urlService.UpdateAsync(url.Id, url);

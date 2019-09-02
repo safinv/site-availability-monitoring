@@ -13,8 +13,8 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\Domain\Domain.csproj" />
-    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+    <ProjectReference Include="..\Domain\SiteAvailabilityMonitoring.Domain.csproj" />
+    <ProjectReference Include="..\Infrastructure\SiteAvailabilityMonitoring.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

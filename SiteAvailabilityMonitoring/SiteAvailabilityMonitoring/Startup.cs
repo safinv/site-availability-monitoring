@@ -1,16 +1,17 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Domain.Settings;
+
+using SiteAvailabilityMonitoring.Domain.Settings;
 using SiteAvailabilityMonitoring.HostedServices;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Infrastructure.Services;
-using Infrastructure.Providers;
-using Infrastructure.Services.Contracts;
+using SiteAvailabilityMonitoring.Infrastructure.Providers;
+using SiteAvailabilityMonitoring.Infrastructure.Services;
+using SiteAvailabilityMonitoring.Infrastructure.Services.Contracts;
 
 namespace SiteAvailabilityMonitoring
 {

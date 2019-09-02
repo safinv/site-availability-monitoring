@@ -1,9 +1,10 @@
-﻿using Infrastructure.Services.Contracts;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Services
+using SiteAvailabilityMonitoring.Infrastructure.Services.Contracts;
+
+namespace SiteAvailabilityMonitoring.Infrastructure.Services
 {
     public class SiteAvailabilityCheker : ISiteAvailabilityCheker
     {
@@ -18,9 +19,10 @@ namespace Infrastructure.Services
         {
             try
             {
-                using (var response = await _httpClient.GetAsync(url)){
+                using (var response = await _httpClient.GetAsync(url))
+                {
                     return true;
-                }                
+                }
             }
             catch
             {

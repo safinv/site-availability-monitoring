@@ -1,10 +1,12 @@
-﻿using Domain.Models;
-using Infrastructure.Providers;
+﻿using System;
+using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
+using SiteAvailabilityMonitoring.Domain.Models;
+using SiteAvailabilityMonitoring.Infrastructure.Providers;
 using SiteAvailabilityMonitoring.Models;
-using System;
-using System.Threading.Tasks;
 
 namespace SiteAvailabilityMonitoring.Controllers
 {
@@ -23,7 +25,7 @@ namespace SiteAvailabilityMonitoring.Controllers
         }
 
         public async Task<IActionResult> Index()
-        {           
+        {
             var applicationSettingModel = await _backgroundSettingService.GetBackgroundTimeAsync();
             var urlModels = await _urlService.GetAllAsync();
             var adminPageModel = new AdministrationPageModel(urlModels, applicationSettingModel);

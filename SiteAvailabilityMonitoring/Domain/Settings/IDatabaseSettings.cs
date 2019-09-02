@@ -1,4 +1,4 @@
-﻿namespace Domain.Settings
+﻿namespace SiteAvailabilityMonitoring.Domain.Settings
 {
     public interface IDatabaseSettings
     {

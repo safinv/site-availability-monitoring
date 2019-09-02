@@ -1,9 +1,9 @@
-﻿using Domain.Settings;
-using Domain.Models;
-using System.Threading.Tasks;
-using Domain.Database;
+﻿using System.Threading.Tasks;
+using SiteAvailabilityMonitoring.Domain.Database;
+using SiteAvailabilityMonitoring.Domain.Models;
+using SiteAvailabilityMonitoring.Domain.Settings;
 
-namespace Infrastructure.Providers
+namespace SiteAvailabilityMonitoring.Infrastructure.Providers
 {
     public class UrlService : BaseDatabaseService<UrlModel>
     {
@@ -16,6 +16,6 @@ namespace Infrastructure.Providers
         public async Task<UrlModel> TryGetById(string id)
         {
             return await GetAsync(model => model.Id == id);
-        } 
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Infrastructure.Services.Contracts
+namespace SiteAvailabilityMonitoring.Infrastructure.Services.Contracts
 {
     public interface ISiteAvailabilityCheker
     {

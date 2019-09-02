@@ -1,13 +1,15 @@
-﻿using Domain.Models;
-using Domain.Settings;
-using MongoDB.Driver;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Domain.Database
+using MongoDB.Driver;
+
+using SiteAvailabilityMonitoring.Domain.Models;
+using SiteAvailabilityMonitoring.Domain.Settings;
+
+namespace SiteAvailabilityMonitoring.Domain.Database
 {
     public abstract class BaseDatabaseService<T> where T : BaseDbModel
     {
@@ -53,11 +55,13 @@ namespace Domain.Database
             return model;
         }
 
-        public async Task RemoveAsync(string id) { 
+        public async Task RemoveAsync(string id)
+        {
             await _models.DeleteOneAsync(model => model.Id == id);
         }
 
-        public async Task UpdateAsync(string id, T updated) { 
+        public async Task UpdateAsync(string id, T updated)
+        {
             await _models.ReplaceOneAsync(model => model.Id == id, updated);
         }
     }

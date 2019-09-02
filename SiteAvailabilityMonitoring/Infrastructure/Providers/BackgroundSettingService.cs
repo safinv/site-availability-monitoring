@@ -1,10 +1,10 @@
-﻿using Domain.Database;
-using Domain.Models;
-using Domain.Settings;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using SiteAvailabilityMonitoring.Domain.Database;
+using SiteAvailabilityMonitoring.Domain.Models;
+using SiteAvailabilityMonitoring.Domain.Settings;
 
-namespace Infrastructure.Providers
+namespace SiteAvailabilityMonitoring.Infrastructure.Providers
 {
     public class BackgroundSettingService : BaseDatabaseService<BackgroundSettingModel>
     {

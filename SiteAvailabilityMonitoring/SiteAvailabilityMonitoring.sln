@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiteAvailabilityMonitoring", "SiteAvailabilityMonitoring\SiteAvailabilityMonitoring.csproj", "{4915DE88-E836-49A9-84A3-DC6EC77D508E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{05B58D32-6499-40E0-A077-E116845DBF39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiteAvailabilityMonitoring.Domain", "Domain\SiteAvailabilityMonitoring.Domain.csproj", "{05B58D32-6499-40E0-A077-E116845DBF39}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{1803281C-4364-4534-8E65-B0CC62525A79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiteAvailabilityMonitoring.Infrastructure", "Infrastructure\SiteAvailabilityMonitoring.Infrastructure.csproj", "{1803281C-4364-4534-8E65-B0CC62525A79}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

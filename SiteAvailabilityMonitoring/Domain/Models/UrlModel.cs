@@ -1,4 +1,4 @@
-﻿namespace Domain.Models
+﻿namespace SiteAvailabilityMonitoring.Domain.Models
 {
     public class UrlModel : BaseDbModel
     {

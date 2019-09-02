@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>SiteAvailabilityMonitoring.Domain</AssemblyName>
+    <RootNamespace>SiteAvailabilityMonitoring.Domain</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using SiteAvailabilityMonitoring.Models;
+﻿using System;
 using System.Threading.Tasks;
-using Domain.Models;
-using Infrastructure.Providers;
+
+using Microsoft.AspNetCore.Mvc;
+
+using SiteAvailabilityMonitoring.Domain.Models;
+using SiteAvailabilityMonitoring.Infrastructure.Providers;
+using SiteAvailabilityMonitoring.Models;
 
 namespace SiteAvailabilityMonitoring.Controllers
 {
@@ -55,7 +57,7 @@ namespace SiteAvailabilityMonitoring.Controllers
                 var user = await _userService.TryGetUser(model.Login);
                 if (user == null)
                 {
-                    await _userService.CreateAsync(new UserModel { Login = model.Login, Password = model.Password});
+                    await _userService.CreateAsync(new UserModel { Login = model.Login, Password = model.Password });
 
                     await Authenticate(model.Login);
 

@@ -1,6 +1,6 @@
-﻿using Domain.Settings;
+﻿using SiteAvailabilityMonitoring.Domain.Settings;
 
-namespace Infrastructure.Services
+namespace SiteAvailabilityMonitoring.Infrastructure.Services
 {
     public class DatabaseSettings : IDatabaseSettings
     {
