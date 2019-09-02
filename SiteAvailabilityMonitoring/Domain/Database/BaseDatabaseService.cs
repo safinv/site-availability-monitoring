@@ -29,7 +29,7 @@ namespace Domain.Database
             return result.ToList();
         }
 
-        public async Task<List<T>> GetAllAsync(Expression<Func<T, bool>> expression)
+        public async Task<List<T>> WhereAsync(Expression<Func<T, bool>> expression)
         {
             var result = await _models.FindAsync(expression);
             return result.ToList();

@@ -18,7 +18,7 @@ namespace Infrastructure.Providers
 
         public async Task<BackgroundSettingModel> GetBackgroundTimeAsync()
         {
-            var model = await GetAllAsync(x => x.Type == BackgroundType);
+            var model = await WhereAsync(x => x.Type == BackgroundType);
             return model.FirstOrDefault();
         }
     }
