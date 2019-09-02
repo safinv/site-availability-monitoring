@@ -18,8 +18,9 @@ namespace Infrastructure.Services
         {
             try
             {
-                var response = await _httpClient.GetAsync(url);
-                return true;
+                using (var response = await _httpClient.GetAsync(url)){
+                    return true;
+                }                
             }
             catch
             {
