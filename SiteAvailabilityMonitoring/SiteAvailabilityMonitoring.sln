@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29102.190
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.779
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiteAvailabilityMonitoring", "SiteAvailabilityMonitoring\SiteAvailabilityMonitoring.csproj", "{4915DE88-E836-49A9-84A3-DC6EC77D508E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiteAvailabilityMonitoring.Domain", "Domain\SiteAvailabilityMonitoring.Domain.csproj", "{05B58D32-6499-40E0-A077-E116845DBF39}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteAvailabilityMonitoring.Domain", "SiteAvailabilityMonitoring.Domain\SiteAvailabilityMonitoring.Domain.csproj", "{7BEC6C46-3A93-4BBC-B1D0-54D5E3538BBD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SiteAvailabilityMonitoring.Infrastructure", "Infrastructure\SiteAvailabilityMonitoring.Infrastructure.csproj", "{1803281C-4364-4534-8E65-B0CC62525A79}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteAvailabilityMonitoring.Infrastructure", "SiteAvailabilityMonitoring.Infrastructure\SiteAvailabilityMonitoring.Infrastructure.csproj", "{1165BF92-0C08-48EA-916E-BC4785E6EBAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,14 +19,14 @@ Global
 		{4915DE88-E836-49A9-84A3-DC6EC77D508E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4915DE88-E836-49A9-84A3-DC6EC77D508E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4915DE88-E836-49A9-84A3-DC6EC77D508E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{05B58D32-6499-40E0-A077-E116845DBF39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{05B58D32-6499-40E0-A077-E116845DBF39}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{05B58D32-6499-40E0-A077-E116845DBF39}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{05B58D32-6499-40E0-A077-E116845DBF39}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1803281C-4364-4534-8E65-B0CC62525A79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1803281C-4364-4534-8E65-B0CC62525A79}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1803281C-4364-4534-8E65-B0CC62525A79}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1803281C-4364-4534-8E65-B0CC62525A79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BEC6C46-3A93-4BBC-B1D0-54D5E3538BBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BEC6C46-3A93-4BBC-B1D0-54D5E3538BBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BEC6C46-3A93-4BBC-B1D0-54D5E3538BBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BEC6C46-3A93-4BBC-B1D0-54D5E3538BBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1165BF92-0C08-48EA-916E-BC4785E6EBAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1165BF92-0C08-48EA-916E-BC4785E6EBAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1165BF92-0C08-48EA-916E-BC4785E6EBAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1165BF92-0C08-48EA-916E-BC4785E6EBAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
