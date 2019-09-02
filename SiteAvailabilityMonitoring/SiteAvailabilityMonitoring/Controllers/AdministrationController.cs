@@ -3,6 +3,7 @@ using Infrastructure.Providers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SiteAvailabilityMonitoring.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace SiteAvailabilityMonitoring.Controllers
@@ -10,19 +11,21 @@ namespace SiteAvailabilityMonitoring.Controllers
     [Authorize]
     public class AdministrationController : Controller
     {
-        private readonly UrlCollectionService _urlCollectionService;
-        private readonly BackgroundSettingsService _applicationSettingsService;
+        private readonly UrlService _urlService;
+        private readonly BackgroundSettingService _backgroundSettingService;
 
-        public AdministrationController(UrlCollectionService urlCollectionService, BackgroundSettingsService applicationSettingsService)
+        private const string IndexActionName = "Index";
+
+        public AdministrationController(UrlService urlService, BackgroundSettingService backgroundSettingService)
         {
-            _urlCollectionService = urlCollectionService;
-            _applicationSettingsService = applicationSettingsService;
+            _urlService = urlService ?? throw new ArgumentNullException(nameof(urlService));
+            _backgroundSettingService = backgroundSettingService ?? throw new ArgumentNullException(nameof(urlService));
         }
 
         public async Task<IActionResult> Index()
         {           
-            var applicationSettingModel = await _applicationSettingsService.GetBackgroundTimeAsync();
-            var urlModels = await _urlCollectionService.GetAllAsync();
+            var applicationSettingModel = await _backgroundSettingService.GetBackgroundTimeAsync();
+            var urlModels = await _urlService.GetAllAsync();
             var adminPageModel = new AdministrationPageModel(urlModels, applicationSettingModel);
 
             return View(adminPageModel);
@@ -38,7 +41,7 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _urlCollectionService.CreateAsync(model);
+                await _urlService.CreateAsync(model);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -47,13 +50,13 @@ namespace SiteAvailabilityMonitoring.Controllers
 
         public async Task<ActionResult> Delete(string id)
         {
-            await _urlCollectionService.RemoveAsync(id);
-            return RedirectToAction("Index");
+            await _urlService.RemoveAsync(id);
+            return RedirectToAction(IndexActionName);
         }
 
         public async Task<ActionResult> Edit(string id)
         {
-            var model = await _urlCollectionService.TryGetById(id);
+            var model = await _urlService.TryGetById(id);
             return View(model);
         }
 
@@ -62,15 +65,15 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _urlCollectionService.UpdateAsync(model.Id, model);
-                return RedirectToAction("Index");
+                await _urlService.UpdateAsync(model.Id, model);
+                return RedirectToAction(IndexActionName);
             }
             return View(model);
         }
 
         public async Task<ActionResult> EditLoopTime()
         {
-            var model = await _applicationSettingsService.GetBackgroundTimeAsync();
+            var model = await _backgroundSettingService.GetBackgroundTimeAsync();
             return View(model);
         }
 
@@ -79,8 +82,8 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _applicationSettingsService.UpdateAsync(model.Id, model);
-                return RedirectToAction("Index");
+                await _backgroundSettingService.UpdateAsync(model.Id, model);
+                return RedirectToAction(IndexActionName);
             }
             return View(model);
         }

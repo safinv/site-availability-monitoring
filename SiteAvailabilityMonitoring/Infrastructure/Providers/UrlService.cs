@@ -5,20 +5,17 @@ using Domain.Database;
 
 namespace Infrastructure.Providers
 {
-    public class UrlCollectionService : BaseDatabaseService<UrlModel>
+    public class UrlService : BaseDatabaseService<UrlModel>
     {
-        public UrlCollectionService(IDatabaseSettings settings) : base(settings)
+        public UrlService(IDatabaseSettings settings) : base(settings)
         {
         }
+
+        protected override string CollectionName => "Urls";
 
         public async Task<UrlModel> TryGetById(string id)
         {
             return await GetAsync(model => model.Id == id);
         } 
-
-        protected override string GetCollectionName()
-        {
-            return "Urls";
-        }
     }
 }

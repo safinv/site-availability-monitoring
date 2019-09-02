@@ -13,12 +13,14 @@ namespace Domain.Database
     {
         private readonly IMongoCollection<T> _models;
 
+        protected abstract string CollectionName { get; }
+
         public BaseDatabaseService(IDatabaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
-            _models = database.GetCollection<T>(GetCollectionName());
+            _models = database.GetCollection<T>(CollectionName);
         }
 
         public async Task<List<T>> GetAllAsync()
@@ -58,7 +60,5 @@ namespace Domain.Database
         public async Task UpdateAsync(string id, T updated) { 
             await _models.ReplaceOneAsync(model => model.Id == id, updated);
         }
-
-        protected abstract string GetCollectionName();
     }
 }

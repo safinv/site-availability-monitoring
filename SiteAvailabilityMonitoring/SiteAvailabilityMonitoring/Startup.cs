@@ -37,8 +37,8 @@ namespace SiteAvailabilityMonitoring
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddSingleton<UrlCollectionService>();
-            services.AddSingleton<BackgroundSettingsService>();
+            services.AddSingleton<UrlService>();
+            services.AddSingleton<BackgroundSettingService>();
             services.AddSingleton<UserService>();
 
             services.AddSingleton<Microsoft.Extensions.Hosting.IHostedService, UrlChekerBackgroundService>();

@@ -11,25 +11,25 @@ namespace SiteAvailabilityMonitoring.HostedServices
 {
     public class UrlChekerBackgroundService : BackgroundService
     {
-        private readonly BackgroundSettingsService _applicationSettingsService;
-        private readonly UrlCollectionService _urlCollectionService;
+        private readonly BackgroundSettingService _backgroundSettingService;
+        private readonly UrlService _urlService;
         private readonly ISiteAvailabilityCheker _siteAvailabilityCheker;
 
-        public UrlChekerBackgroundService(BackgroundSettingsService applicationSettingsService, UrlCollectionService urlCollectionService, ISiteAvailabilityCheker siteAvailabilityCheker)
+        public UrlChekerBackgroundService(BackgroundSettingService backgroundSettingService, UrlService urlService, ISiteAvailabilityCheker siteAvailabilityCheker)
         {
-            _applicationSettingsService = applicationSettingsService ?? throw new ArgumentNullException(nameof(applicationSettingsService));
-            _urlCollectionService = urlCollectionService;
-            _siteAvailabilityCheker = siteAvailabilityCheker;
+            _backgroundSettingService = backgroundSettingService ?? throw new ArgumentNullException(nameof(backgroundSettingService));
+            _urlService = urlService ?? throw new ArgumentNullException(nameof(urlService));
+            _siteAvailabilityCheker = siteAvailabilityCheker ?? throw new ArgumentNullException(nameof(siteAvailabilityCheker));
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                var time = await _applicationSettingsService.GetBackgroundTimeAsync();                
+                var time = await _backgroundSettingService.GetBackgroundTimeAsync();                
                 var span = new TimeSpan(time.Hour, time.Minutes, time.Seconds);
 
-                var urls = await _urlCollectionService.GetAllAsync();
+                var urls = await _urlService.GetAllAsync();
 
                 try
                 {
@@ -53,7 +53,7 @@ namespace SiteAvailabilityMonitoring.HostedServices
                 if(url.IsAvailable != result)
                 {
                     url.IsAvailable = result;
-                    await _urlCollectionService.UpdateAsync(url.Id, url);
+                    await _urlService.UpdateAsync(url.Id, url);
                 }
             }
         }

@@ -9,16 +9,16 @@ namespace SiteAvailabilityMonitoring.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly UrlCollectionService _urlCollectionService;
+        private readonly UrlService _urlService;
 
-        public HomeController(UrlCollectionService urlCollectionService)
+        public HomeController(UrlService urlService)
         {
-            _urlCollectionService = urlCollectionService ?? throw new ArgumentNullException(nameof(urlCollectionService));
+            _urlService = urlService ?? throw new ArgumentNullException(nameof(urlService));
         }
 
         public async Task<IActionResult> Index()
         {
-            var models = await _urlCollectionService.GetAllAsync();
+            var models = await _urlService.GetAllAsync();
             return View(models);
         }
 

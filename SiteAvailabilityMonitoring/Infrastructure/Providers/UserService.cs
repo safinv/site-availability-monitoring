@@ -11,6 +11,8 @@ namespace Infrastructure.Providers
         {
         }
 
+        protected override string CollectionName => "Users";
+
         public async Task<UserModel> TryGetUser(string login, string password)
         {
             var result = await GetAsync(user => user.Login == login && user.Password == password);
@@ -21,11 +23,6 @@ namespace Infrastructure.Providers
         {
             var result = await GetAsync(user => user.Login == login);
             return result;
-        }
-
-        protected override string GetCollectionName()
-        {
-            return "Users";
         }
     }
 }
