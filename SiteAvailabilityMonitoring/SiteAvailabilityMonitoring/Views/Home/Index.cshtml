@@ -10,16 +10,20 @@
 <table class="table">
     <tr>
         <th>Url</th>
-        <th>Доступность</th>
+        <th>Available</th>
+        <th>Status</th>
     </tr>
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => item.Url)</td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsAvailable)
-            </td>
-        </tr>
+    <tr>
+        <td>@Html.DisplayFor(modelItem => item.Url)</td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsAvailable)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.StatusCode)
+        </td>
+    </tr>
     }
 </table>

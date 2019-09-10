@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
+using SiteAvailabilityMonitoring.Domain.Models;
 
 namespace SiteAvailabilityMonitoring.Infrastructure.Services.Contracts
 {
     public interface ISiteAvailabilityCheker
     {
-        Task<bool> CheckUrlAsync(string url);
+        Task CheckAsync(Site site);
     }
 }

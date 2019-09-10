@@ -46,17 +46,12 @@ namespace SiteAvailabilityMonitoring.HostedServices
             }
         }
 
-        private async Task CheckAsync(IEnumerable<Site> urls)
+        private async Task CheckAsync(IEnumerable<Site> sites)
         {
-            foreach (var url in urls)
+            foreach (var site in sites)
             {
-                var result = await _siteAvailabilityCheker.CheckUrlAsync(url.Url);
-
-                if (url.IsAvailable != result)
-                {
-                    url.IsAvailable = result;
-                    await _siteRepository.UpdateAsync(url);
-                }
+                await _siteAvailabilityCheker.CheckAsync(site);
+                await _siteRepository.UpdateAsync(site);                
             }
         }
     }
