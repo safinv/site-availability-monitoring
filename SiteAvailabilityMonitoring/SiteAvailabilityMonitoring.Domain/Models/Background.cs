@@ -1,6 +1,6 @@
 ﻿namespace SiteAvailabilityMonitoring.Domain.Models
 {
-    public class BackgroundSettingModel : BaseDbModel
+    public class Background : BaseEntity
     {
         public string Type { get; set; }
 

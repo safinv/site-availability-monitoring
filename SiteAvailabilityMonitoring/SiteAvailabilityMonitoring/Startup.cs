@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 using SiteAvailabilityMonitoring.Domain.Settings;
 using SiteAvailabilityMonitoring.HostedServices;
-using SiteAvailabilityMonitoring.Infrastructure.Providers;
+using SiteAvailabilityMonitoring.Infrastructure.Repositories;
 using SiteAvailabilityMonitoring.Infrastructure.Services;
 using SiteAvailabilityMonitoring.Infrastructure.Services.Contracts;
 
@@ -38,9 +38,9 @@ namespace SiteAvailabilityMonitoring
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddSingleton<UrlService>();
-            services.AddSingleton<BackgroundSettingService>();
-            services.AddSingleton<UserService>();
+            services.AddSingleton<SiteRepository>();
+            services.AddSingleton<BackgroundRepository>();
+            services.AddSingleton<UserRepository>();
 
             services.AddSingleton<Microsoft.Extensions.Hosting.IHostedService, UrlChekerBackgroundService>();
 

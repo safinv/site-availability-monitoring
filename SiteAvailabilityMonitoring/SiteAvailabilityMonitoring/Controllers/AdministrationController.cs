@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using SiteAvailabilityMonitoring.Domain.Models;
-using SiteAvailabilityMonitoring.Infrastructure.Providers;
+using SiteAvailabilityMonitoring.Infrastructure.Repositories;
 using SiteAvailabilityMonitoring.Models;
 
 namespace SiteAvailabilityMonitoring.Controllers
@@ -13,22 +13,22 @@ namespace SiteAvailabilityMonitoring.Controllers
     [Authorize]
     public class AdministrationController : Controller
     {
-        private readonly UrlService _urlService;
-        private readonly BackgroundSettingService _backgroundSettingService;
+        private readonly SiteRepository _siteRepository;
+        private readonly BackgroundRepository _backgroundRepository;
 
         private const string IndexActionName = "Index";
 
-        public AdministrationController(UrlService urlService, BackgroundSettingService backgroundSettingService)
+        public AdministrationController(SiteRepository siteRepository, BackgroundRepository backgroundRepository)
         {
-            _urlService = urlService ?? throw new ArgumentNullException(nameof(urlService));
-            _backgroundSettingService = backgroundSettingService ?? throw new ArgumentNullException(nameof(urlService));
+            _siteRepository = siteRepository ?? throw new ArgumentNullException(nameof(siteRepository));
+            _backgroundRepository = backgroundRepository ?? throw new ArgumentNullException(nameof(siteRepository));
         }
 
         public async Task<IActionResult> Index()
         {
-            var applicationSettingModel = await _backgroundSettingService.GetBackgroundTimeAsync();
-            var urlModels = await _urlService.GetAllAsync();
-            var adminPageModel = new AdministrationPageModel(urlModels, applicationSettingModel);
+            var applicationSettingModel = await _backgroundRepository.GetAsync(b => b.Type == "Background");
+            var sites = await _siteRepository.GetAllAsync();
+            var adminPageModel = new AdministrationPageModel(sites, applicationSettingModel);
 
             return View(adminPageModel);
         }
@@ -39,11 +39,11 @@ namespace SiteAvailabilityMonitoring.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(UrlModel model)
+        public async Task<ActionResult> Create(Site model)
         {
             if (ModelState.IsValid)
             {
-                await _urlService.CreateAsync(model);
+                await _siteRepository.AddAsync(model);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -52,22 +52,22 @@ namespace SiteAvailabilityMonitoring.Controllers
 
         public async Task<ActionResult> Delete(string id)
         {
-            await _urlService.RemoveAsync(id);
+            await _siteRepository.RemoveAsync(id);
             return RedirectToAction(IndexActionName);
         }
 
         public async Task<ActionResult> Edit(string id)
         {
-            var model = await _urlService.TryGetById(id);
+            var model = await _siteRepository.GetAsync(s => s.Id == id);
             return View(model);
         }
 
         [HttpPost]
-        public async Task<ActionResult> Edit(UrlModel model)
+        public async Task<ActionResult> Edit(Site model)
         {
             if (ModelState.IsValid)
             {
-                await _urlService.UpdateAsync(model.Id, model);
+                await _siteRepository.UpdateAsync(model);
                 return RedirectToAction(IndexActionName);
             }
             return View(model);
@@ -75,16 +75,16 @@ namespace SiteAvailabilityMonitoring.Controllers
 
         public async Task<ActionResult> EditLoopTime()
         {
-            var model = await _backgroundSettingService.GetBackgroundTimeAsync();
+            var model = await _backgroundRepository.GetAsync(b => b.Type == "Background");
             return View(model);
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditLoopTime(BackgroundSettingModel model)
+        public async Task<ActionResult> EditLoopTime(Background model)
         {
             if (ModelState.IsValid)
             {
-                await _backgroundSettingService.UpdateAsync(model.Id, model);
+                await _backgroundRepository.UpdateAsync(model);
                 return RedirectToAction(IndexActionName);
             }
             return View(model);

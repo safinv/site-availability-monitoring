@@ -1,6 +1,6 @@
 ﻿namespace SiteAvailabilityMonitoring.Domain.Models
 {
-    public class UrlModel : BaseDbModel
+    public class Site : BaseEntity
     {
         public string Url { get; set; }
 

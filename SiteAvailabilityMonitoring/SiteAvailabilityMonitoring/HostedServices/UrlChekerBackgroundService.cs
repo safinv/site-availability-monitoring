@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 
 using SiteAvailabilityMonitoring.Domain.Models;
-using SiteAvailabilityMonitoring.Infrastructure.Providers;
+using SiteAvailabilityMonitoring.Infrastructure.Repositories;
 using SiteAvailabilityMonitoring.Infrastructure.Services.Contracts;
 
 namespace SiteAvailabilityMonitoring.HostedServices
 {
     public class UrlChekerBackgroundService : BackgroundService
     {
-        private readonly BackgroundSettingService _backgroundSettingService;
-        private readonly UrlService _urlService;
+        private readonly BackgroundRepository _backgroundRepository;
+        private readonly SiteRepository _siteRepository;
         private readonly ISiteAvailabilityCheker _siteAvailabilityCheker;
 
-        public UrlChekerBackgroundService(BackgroundSettingService backgroundSettingService, UrlService urlService, ISiteAvailabilityCheker siteAvailabilityCheker)
+        public UrlChekerBackgroundService(BackgroundRepository backgroundRepository, SiteRepository siteRepository, ISiteAvailabilityCheker siteAvailabilityCheker)
         {
-            _backgroundSettingService = backgroundSettingService ?? throw new ArgumentNullException(nameof(backgroundSettingService));
-            _urlService = urlService ?? throw new ArgumentNullException(nameof(urlService));
+            _backgroundRepository = backgroundRepository ?? throw new ArgumentNullException(nameof(backgroundRepository));
+            _siteRepository = siteRepository ?? throw new ArgumentNullException(nameof(siteRepository));
             _siteAvailabilityCheker = siteAvailabilityCheker ?? throw new ArgumentNullException(nameof(siteAvailabilityCheker));
         }
 
@@ -28,10 +28,10 @@ namespace SiteAvailabilityMonitoring.HostedServices
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                var time = await _backgroundSettingService.GetBackgroundTimeAsync();
+                var time = await _backgroundRepository.GetAsync(b => b.Type == "Background");
                 var span = new TimeSpan(time.Hour, time.Minutes, time.Seconds);
 
-                var urls = await _urlService.GetAllAsync();
+                var urls = await _siteRepository.GetAllAsync();
 
                 try
                 {
@@ -46,7 +46,7 @@ namespace SiteAvailabilityMonitoring.HostedServices
             }
         }
 
-        private async Task CheckAsync(IEnumerable<UrlModel> urls)
+        private async Task CheckAsync(IEnumerable<Site> urls)
         {
             foreach (var url in urls)
             {
@@ -55,7 +55,7 @@ namespace SiteAvailabilityMonitoring.HostedServices
                 if (url.IsAvailable != result)
                 {
                     url.IsAvailable = result;
-                    await _urlService.UpdateAsync(url.Id, url);
+                    await _siteRepository.UpdateAsync(url);
                 }
             }
         }

@@ -4,23 +4,23 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
 
-using SiteAvailabilityMonitoring.Infrastructure.Providers;
+using SiteAvailabilityMonitoring.Infrastructure.Repositories;
 using SiteAvailabilityMonitoring.Models;
 
 namespace SiteAvailabilityMonitoring.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly UrlService _urlService;
+        private readonly SiteRepository _siteRepository;
 
-        public HomeController(UrlService urlService)
+        public HomeController(SiteRepository siteRepository)
         {
-            _urlService = urlService ?? throw new ArgumentNullException(nameof(urlService));
+            _siteRepository = siteRepository ?? throw new ArgumentNullException(nameof(siteRepository));
         }
 
         public async Task<IActionResult> Index()
         {
-            var models = await _urlService.GetAllAsync();
+            var models = await _siteRepository.GetAllAsync();
             return View(models);
         }
 

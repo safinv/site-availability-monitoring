@@ -4,18 +4,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 using SiteAvailabilityMonitoring.Domain.Models;
-using SiteAvailabilityMonitoring.Infrastructure.Providers;
+using SiteAvailabilityMonitoring.Infrastructure.Repositories;
 using SiteAvailabilityMonitoring.Models;
 
 namespace SiteAvailabilityMonitoring.Controllers
 {
     public class AccountController : BaseAuthController
     {
-        private readonly UserService _userService;
+        private readonly UserRepository _userRepository;
 
-        public AccountController(UserService userService)
+        public AccountController(UserRepository userRepository)
         {
-            _userService = userService ?? throw new ArgumentNullException();
+            _userRepository = userRepository ?? throw new ArgumentNullException();
         }
 
         [HttpGet]
@@ -29,7 +29,7 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userService.TryGetUser(model.Login, model.Password);
+                var user = await _userRepository.GetAsync(u => u.Login == model.Login && u.Password == model.Password);
                 if (user != null)
                 {
                     await Authenticate(model.Login);
@@ -54,10 +54,10 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userService.TryGetUser(model.Login);
+                var user = await _userRepository.GetAsync(u => u.Login == model.Login);
                 if (user == null)
                 {
-                    await _userService.CreateAsync(new UserModel { Login = model.Login, Password = model.Password });
+                    await _userRepository.AddAsync(new User { Login = model.Login, Password = model.Password });
 
                     await Authenticate(model.Login);
 

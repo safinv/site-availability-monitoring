@@ -6,13 +6,13 @@ namespace SiteAvailabilityMonitoring.Models
 {
     public class AdministrationPageModel
     {
-        public AdministrationPageModel(IList<UrlModel> urlModels, BackgroundSettingModel applicationSettingModel)
+        public AdministrationPageModel(IEnumerable<Site> sites, Background applicationSettingModel)
         {
-            UrlModels = urlModels;
+            Sites = sites;
             Time = string.Join(":", applicationSettingModel.Hour, applicationSettingModel.Minutes, applicationSettingModel.Seconds);
         }
 
-        public IList<UrlModel> UrlModels { get; }
+        public IEnumerable<Site> Sites { get; }
 
         public string Time { get; }
     }

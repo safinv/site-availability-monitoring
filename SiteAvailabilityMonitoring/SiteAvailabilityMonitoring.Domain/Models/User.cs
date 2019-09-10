@@ -1,6 +1,6 @@
 ﻿namespace SiteAvailabilityMonitoring.Domain.Models
 {
-    public class UserModel : BaseDbModel
+    public class User : BaseEntity
     {
         public string Login { get; set; }
 
