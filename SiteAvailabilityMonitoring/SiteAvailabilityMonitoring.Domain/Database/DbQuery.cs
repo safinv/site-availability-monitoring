@@ -11,47 +11,46 @@ using SiteAvailabilityMonitoring.Domain.Settings;
 
 namespace SiteAvailabilityMonitoring.Domain.Database
 {
-    public abstract class BaseRepository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity
+    public class DbQuery<TEntity> : IDbQuery<TEntity> where TEntity : BaseEntity
     {
-        protected readonly IMongoDatabase _database;
-        protected readonly IMongoCollection<TEntity> _dbSet;
-
-        protected BaseRepository(IDatabaseSettings dbSettings)
+        private readonly IMongoDatabase _database;
+               
+        public DbQuery(IDatabaseSettings dbSettings)
         {
             var client = new MongoClient(dbSettings.ConnectionString);
             if (client != null)
             {
                 _database = client.GetDatabase(dbSettings.DatabaseName);
             }
-
-            _dbSet = _database.GetCollection<TEntity>(typeof(TEntity).Name);
         }
 
-        public virtual async Task AddAsync(TEntity obj)
-        {
-            await _dbSet.InsertOneAsync(obj);
-        }
-
+        public IMongoCollection<TEntity> Collection => _database.GetCollection<TEntity>(typeof(TEntity).Name);
+               
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync()
         {
-            var result = await _dbSet.FindAsync(_ => true);
+            var result = await Collection.FindAsync(_ => true);
             return result.ToList();
         }
 
         public virtual async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> expression)
         {
-            var result = await _dbSet.FindAsync(expression);
+            var result = await Collection.FindAsync(expression);
             return result.FirstOrDefault();
+        }
+
+        public virtual async Task AddAsync(TEntity obj)
+        {
+            await Collection.InsertOneAsync(obj);
         }
 
         public virtual async Task RemoveAsync(string id)
         {
-            await _dbSet.DeleteOneAsync(entity => entity.Id == id);
+            await Collection.DeleteOneAsync(entity => entity.Id == id);
         }
 
         public virtual async Task UpdateAsync(TEntity obj)
         {
-            await _dbSet.ReplaceOneAsync(entity => entity.Id == obj.Id, obj);
+            await Collection.ReplaceOneAsync(entity => entity.Id == obj.Id, obj);
         }
     }
 }

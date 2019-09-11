@@ -7,11 +7,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
+using SiteAvailabilityMonitoring.Domain.Database;
+using SiteAvailabilityMonitoring.Domain.Database.Contracts;
 using SiteAvailabilityMonitoring.Domain.Settings;
 using SiteAvailabilityMonitoring.HostedServices;
-using SiteAvailabilityMonitoring.Infrastructure.Repositories;
 using SiteAvailabilityMonitoring.Infrastructure.Services;
 using SiteAvailabilityMonitoring.Infrastructure.Services.Contracts;
+
+using IHostedService = Microsoft.Extensions.Hosting.IHostedService;
 
 namespace SiteAvailabilityMonitoring
 {
@@ -38,11 +41,9 @@ namespace SiteAvailabilityMonitoring
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddSingleton<SiteRepository>();
-            services.AddSingleton<BackgroundRepository>();
-            services.AddSingleton<UserRepository>();
+            services.AddTransient(typeof(IDbQuery<>), typeof(DbQuery<>));
 
-            services.AddSingleton<Microsoft.Extensions.Hosting.IHostedService, UrlChekerBackgroundService>();
+            services.AddSingleton<IHostedService, UrlChekerBackgroundService>();
 
             services.AddHttpClient<ISiteAvailabilityCheker, SiteAvailabilityCheker>();
 

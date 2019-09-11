@@ -4,23 +4,22 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.Hosting;
-
+using SiteAvailabilityMonitoring.Domain.Database.Contracts;
 using SiteAvailabilityMonitoring.Domain.Models;
-using SiteAvailabilityMonitoring.Infrastructure.Repositories;
 using SiteAvailabilityMonitoring.Infrastructure.Services.Contracts;
 
 namespace SiteAvailabilityMonitoring.HostedServices
 {
     public class UrlChekerBackgroundService : BackgroundService
     {
-        private readonly BackgroundRepository _backgroundRepository;
-        private readonly SiteRepository _siteRepository;
+        private readonly IDbQuery<Background> _backgroundQuery;
+        private readonly IDbQuery<Site> _siteQuery;
         private readonly ISiteAvailabilityCheker _siteAvailabilityCheker;
 
-        public UrlChekerBackgroundService(BackgroundRepository backgroundRepository, SiteRepository siteRepository, ISiteAvailabilityCheker siteAvailabilityCheker)
+        public UrlChekerBackgroundService(IDbQuery<Background> backgroundQuery, IDbQuery<Site> siteQuery, ISiteAvailabilityCheker siteAvailabilityCheker)
         {
-            _backgroundRepository = backgroundRepository ?? throw new ArgumentNullException(nameof(backgroundRepository));
-            _siteRepository = siteRepository ?? throw new ArgumentNullException(nameof(siteRepository));
+            _backgroundQuery = backgroundQuery ?? throw new ArgumentNullException(nameof(backgroundQuery));
+            _siteQuery = siteQuery ?? throw new ArgumentNullException(nameof(siteQuery));
             _siteAvailabilityCheker = siteAvailabilityCheker ?? throw new ArgumentNullException(nameof(siteAvailabilityCheker));
         }
 
@@ -28,10 +27,10 @@ namespace SiteAvailabilityMonitoring.HostedServices
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                var time = await _backgroundRepository.GetAsync(b => b.Type == "Background");
+                var time = await _backgroundQuery.GetAsync(b => b.Type == "Background");
                 var span = new TimeSpan(time.Hour, time.Minutes, time.Seconds);
 
-                var urls = await _siteRepository.GetAllAsync();
+                var urls = await _siteQuery.GetAllAsync();
 
                 try
                 {
@@ -51,7 +50,7 @@ namespace SiteAvailabilityMonitoring.HostedServices
             foreach (var site in sites)
             {
                 await _siteAvailabilityCheker.CheckAsync(site);
-                await _siteRepository.UpdateAsync(site);                
+                await _siteQuery.UpdateAsync(site);                
             }
         }
     }

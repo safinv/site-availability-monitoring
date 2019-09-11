@@ -4,23 +4,24 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
 
-using SiteAvailabilityMonitoring.Infrastructure.Repositories;
+using SiteAvailabilityMonitoring.Domain.Database.Contracts;
+using SiteAvailabilityMonitoring.Domain.Models;
 using SiteAvailabilityMonitoring.Models;
 
 namespace SiteAvailabilityMonitoring.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly SiteRepository _siteRepository;
+        private readonly IDbQuery<Site> _siteQuery;
 
-        public HomeController(SiteRepository siteRepository)
+        public HomeController(IDbQuery<Site> siteQuery)
         {
-            _siteRepository = siteRepository ?? throw new ArgumentNullException(nameof(siteRepository));
+            _siteQuery = siteQuery ?? throw new ArgumentNullException(nameof(siteQuery));
         }
 
         public async Task<IActionResult> Index()
         {
-            var models = await _siteRepository.GetAllAsync();
+            var models = await _siteQuery.GetAllAsync();
             return View(models);
         }
 

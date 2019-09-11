@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using SiteAvailabilityMonitoring.Domain.Database.Contracts;
 using SiteAvailabilityMonitoring.Domain.Models;
-using SiteAvailabilityMonitoring.Infrastructure.Repositories;
 using SiteAvailabilityMonitoring.Models;
 
 namespace SiteAvailabilityMonitoring.Controllers
@@ -13,21 +13,21 @@ namespace SiteAvailabilityMonitoring.Controllers
     [Authorize]
     public class AdministrationController : Controller
     {
-        private readonly SiteRepository _siteRepository;
-        private readonly BackgroundRepository _backgroundRepository;
+        private readonly IDbQuery<Site> _siteQuery;
+        private readonly IDbQuery<Background> _backgroundQuery;
 
         private const string IndexActionName = "Index";
 
-        public AdministrationController(SiteRepository siteRepository, BackgroundRepository backgroundRepository)
+        public AdministrationController(IDbQuery<Site> siteQuery, IDbQuery<Background> backgroundQuery)
         {
-            _siteRepository = siteRepository ?? throw new ArgumentNullException(nameof(siteRepository));
-            _backgroundRepository = backgroundRepository ?? throw new ArgumentNullException(nameof(siteRepository));
+            _siteQuery = siteQuery ?? throw new ArgumentNullException(nameof(siteQuery));
+            _backgroundQuery = backgroundQuery ?? throw new ArgumentNullException(nameof(backgroundQuery));
         }
 
         public async Task<IActionResult> Index()
         {
-            var applicationSettingModel = await _backgroundRepository.GetAsync(b => b.Type == "Background");
-            var sites = await _siteRepository.GetAllAsync();
+            var applicationSettingModel = await _backgroundQuery.GetAsync(b => b.Type == "Background");
+            var sites = await _siteQuery.GetAllAsync();
             var adminPageModel = new AdministrationPageModel(sites, applicationSettingModel);
 
             return View(adminPageModel);
@@ -43,7 +43,7 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _siteRepository.AddAsync(model);
+                await _siteQuery.AddAsync(model);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -52,13 +52,13 @@ namespace SiteAvailabilityMonitoring.Controllers
 
         public async Task<ActionResult> Delete(string id)
         {
-            await _siteRepository.RemoveAsync(id);
+            await _siteQuery.RemoveAsync(id);
             return RedirectToAction(IndexActionName);
         }
 
         public async Task<ActionResult> Edit(string id)
         {
-            var model = await _siteRepository.GetAsync(s => s.Id == id);
+            var model = await _siteQuery.GetAsync(s => s.Id == id);
             return View(model);
         }
 
@@ -67,7 +67,7 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _siteRepository.UpdateAsync(model);
+                await _siteQuery.UpdateAsync(model);
                 return RedirectToAction(IndexActionName);
             }
             return View(model);
@@ -75,7 +75,7 @@ namespace SiteAvailabilityMonitoring.Controllers
 
         public async Task<ActionResult> EditLoopTime()
         {
-            var model = await _backgroundRepository.GetAsync(b => b.Type == "Background");
+            var model = await _backgroundQuery.GetAsync(b => b.Type == "Background");
             return View(model);
         }
 
@@ -84,7 +84,7 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _backgroundRepository.UpdateAsync(model);
+                await _backgroundQuery.UpdateAsync(model);
                 return RedirectToAction(IndexActionName);
             }
             return View(model);
