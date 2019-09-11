@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Microsoft.Extensions.Hosting;
+
 using SiteAvailabilityMonitoring.Domain.Database.Contracts;
 using SiteAvailabilityMonitoring.Domain.Models;
 using SiteAvailabilityMonitoring.Infrastructure.Services.Contracts;
@@ -12,13 +13,19 @@ namespace SiteAvailabilityMonitoring.HostedServices
 {
     public class UrlChekerBackgroundService : BackgroundService
     {
-        private readonly IDbCommand<Background> _backgroundCommand;
-        private readonly IDbCommand<Site> _siteCommand;
+        private readonly IDbQuery<Background> _backgroundQuery;
+        private readonly IDbQuery<Site> _siteQuery;
+        private readonly IDbRequest<Site> _siteCommand;
         private readonly ISiteAvailabilityCheker _siteAvailabilityCheker;
 
-        public UrlChekerBackgroundService(IDbCommand<Background> backgroundCommand, IDbCommand<Site> siteCommand, ISiteAvailabilityCheker siteAvailabilityCheker)
+        public UrlChekerBackgroundService(
+            IDbQuery<Background> backgroundQuery,
+            IDbQuery<Site> siteQuery,
+            IDbRequest<Site> siteCommand,
+            ISiteAvailabilityCheker siteAvailabilityCheker)
         {
-            _backgroundCommand = backgroundCommand ?? throw new ArgumentNullException(nameof(backgroundCommand));
+            _backgroundQuery = backgroundQuery ?? throw new ArgumentNullException(nameof(backgroundQuery));
+            _siteQuery = siteQuery ?? throw new ArgumentNullException(nameof(siteQuery));
             _siteCommand = siteCommand ?? throw new ArgumentNullException(nameof(siteCommand));
             _siteAvailabilityCheker = siteAvailabilityCheker ?? throw new ArgumentNullException(nameof(siteAvailabilityCheker));
         }
@@ -27,10 +34,10 @@ namespace SiteAvailabilityMonitoring.HostedServices
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                var time = await _backgroundCommand.Query.GetAsync(b => b.Type == "Background");
+                var time = await _backgroundQuery.GetAsync(b => b.Type == "Background");
                 var span = new TimeSpan(time.Hour, time.Minutes, time.Seconds);
 
-                var urls = await _siteCommand.Query.GetAllAsync();
+                var urls = await _siteQuery.GetAllAsync();
 
                 try
                 {
@@ -51,8 +58,7 @@ namespace SiteAvailabilityMonitoring.HostedServices
             {
                 await _siteAvailabilityCheker.CheckAsync(site);
 
-                _siteCommand.Update(site);
-                await _siteCommand.Commit();
+                await _siteCommand.UpdateAsync(site);
             }
         }
     }

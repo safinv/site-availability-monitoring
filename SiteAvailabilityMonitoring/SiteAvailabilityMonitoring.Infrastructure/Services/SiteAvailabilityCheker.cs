@@ -33,7 +33,7 @@ namespace SiteAvailabilityMonitoring.Infrastructure.Services
                     return new Response { IsAvailable = response.IsSuccessStatusCode, StatusCode = response.StatusCode.ToString() };
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new Response { IsAvailable = false, StatusCode = ex.Message };
             }

@@ -11,11 +11,13 @@ namespace SiteAvailabilityMonitoring.Controllers
 {
     public class AccountController : BaseAuthController
     {
-        private readonly IDbCommand<User> _userCommand;
+        private readonly IDbQuery<User> _userQuery;
+        private readonly IDbRequest<User> _userRequest;
 
-        public AccountController(IDbCommand<User> userCommand)
+        public AccountController(IDbQuery<User> userQuery, IDbRequest<User> userRequest)
         {
-            _userCommand = userCommand ?? throw new ArgumentNullException(nameof(userCommand));
+            _userQuery = userQuery ?? throw new ArgumentNullException(nameof(userQuery));
+            _userRequest = userRequest ?? throw new ArgumentNullException(nameof(userRequest));
         }
 
         [HttpGet]
@@ -29,7 +31,7 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userCommand.Query.GetAsync(u => u.Login == model.Login && u.Password == model.Password);
+                var user = await _userQuery.GetAsync(u => u.Login == model.Login && u.Password == model.Password);
                 if (user != null)
                 {
                     await Authenticate(model.Login);
@@ -54,11 +56,10 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userCommand.Query.GetAsync(u => u.Login == model.Login);
+                var user = await _userQuery.GetAsync(u => u.Login == model.Login);
                 if (user == null)
                 {
-                    _userCommand.Add(new User { Login = model.Login, Password = model.Password });
-                    await _userCommand.Commit();
+                    await _userRequest.AddAsync(new User { Login = model.Login, Password = model.Password });
 
                     await Authenticate(model.Login);
 

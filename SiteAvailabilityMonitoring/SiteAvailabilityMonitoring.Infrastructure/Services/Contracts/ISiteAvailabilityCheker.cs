@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+
 using SiteAvailabilityMonitoring.Domain.Models;
 
 namespace SiteAvailabilityMonitoring.Infrastructure.Services.Contracts

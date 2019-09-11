@@ -7,16 +7,17 @@ using MongoDB.Driver;
 
 using SiteAvailabilityMonitoring.Domain.Database.Contracts;
 using SiteAvailabilityMonitoring.Domain.Models;
+using SiteAvailabilityMonitoring.Domain.Settings;
 
 namespace SiteAvailabilityMonitoring.Domain.Database
 {
     public class DbQuery<TEntity> : IDbQuery<TEntity> where TEntity : BaseEntity
     {
-        private readonly MongoDbContext<TEntity> _dbContext = null;
+        private readonly DbContext<TEntity> _dbContext;
 
-        public DbQuery(MongoDbContext<TEntity> dbContext)
+        public DbQuery(IDatabaseSettings dbSettings)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            _dbContext = new DbContext<TEntity>(dbSettings);
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAllAsync()

@@ -13,21 +13,31 @@ namespace SiteAvailabilityMonitoring.Controllers
     [Authorize]
     public class AdministrationController : Controller
     {
-        private readonly IDbCommand<Site> _siteCommand;
-        private readonly IDbCommand<Background> _backgroundCommand;
+        private readonly IDbRequest<Site> _siteRequest;
+        private readonly IDbRequest<Background> _backgroundRequest;
+
+        private readonly IDbQuery<Site> _siteQuery;
+        private readonly IDbQuery<Background> _backgroundQuery;
 
         private const string IndexActionName = "Index";
 
-        public AdministrationController(IDbCommand<Site> siteCommand, IDbCommand<Background> backgroundCommand)
+        public AdministrationController(
+            IDbRequest<Site> siteRequest,
+            IDbRequest<Background> backgroundRequest,
+            IDbQuery<Site> siteQuery,
+            IDbQuery<Background> backgroundQuery)
         {
-            _siteCommand = siteCommand ?? throw new ArgumentNullException(nameof(siteCommand));
-            _backgroundCommand = backgroundCommand ?? throw new ArgumentNullException(nameof(backgroundCommand));
+            _siteRequest = siteRequest ?? throw new ArgumentNullException(nameof(siteRequest));
+            _backgroundRequest = backgroundRequest ?? throw new ArgumentNullException(nameof(backgroundRequest));
+
+            _siteQuery = siteQuery ?? throw new ArgumentNullException(nameof(siteQuery));
+            _backgroundQuery = backgroundQuery ?? throw new ArgumentNullException(nameof(backgroundQuery));
         }
 
         public async Task<IActionResult> Index()
         {
-            var applicationSettingModel = await _backgroundCommand.Query.GetAsync(b => b.Type == "Background");
-            var sites = await _siteCommand.Query.GetAllAsync();
+            var applicationSettingModel = await _backgroundQuery.GetAsync(b => b.Type == "Background");
+            var sites = await _siteQuery.GetAllAsync();
             var adminPageModel = new AdministrationPageModel(sites, applicationSettingModel);
 
             return View(adminPageModel);
@@ -43,8 +53,7 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             if (ModelState.IsValid)
             {
-                _siteCommand.Add(model);
-                await _siteCommand.Commit();
+                await _siteRequest.AddAsync(model);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -54,15 +63,14 @@ namespace SiteAvailabilityMonitoring.Controllers
 
         public async Task<ActionResult> Delete(string id)
         {
-            _siteCommand.Remove(id);
-            await _siteCommand.Commit();
+            await _siteRequest.RemoveAsync(id);
 
             return RedirectToAction(IndexActionName);
         }
 
         public async Task<ActionResult> Edit(string id)
         {
-            var model = await _siteCommand.Query.GetAsync(s => s.Id == id);
+            var model = await _siteQuery.GetAsync(s => s.Id == id);
             return View(model);
         }
 
@@ -71,8 +79,7 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             if (ModelState.IsValid)
             {
-                _siteCommand.Update(model);
-                await _siteCommand.Commit();
+                await _siteRequest.UpdateAsync(model);
 
                 return RedirectToAction(IndexActionName);
             }
@@ -81,7 +88,7 @@ namespace SiteAvailabilityMonitoring.Controllers
 
         public async Task<ActionResult> EditLoopTime()
         {
-            var model = await _backgroundCommand.Query.GetAsync(b => b.Type == "Background");
+            var model = await _backgroundQuery.GetAsync(b => b.Type == "Background");
             return View(model);
         }
 
@@ -90,8 +97,7 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             if (ModelState.IsValid)
             {
-                _backgroundCommand.Update(model);
-                await _backgroundCommand.Commit();
+                await _backgroundRequest.UpdateAsync(model);
 
                 return RedirectToAction(IndexActionName);
             }
