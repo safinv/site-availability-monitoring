@@ -41,7 +41,7 @@ namespace SiteAvailabilityMonitoring
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            services.AddTransient(typeof(IDbQuery<>), typeof(DbQuery<>));
+            services.AddTransient(typeof(IDbCommand<>), typeof(DbCommand<>));
 
             services.AddSingleton<IHostedService, UrlChekerBackgroundService>();
 

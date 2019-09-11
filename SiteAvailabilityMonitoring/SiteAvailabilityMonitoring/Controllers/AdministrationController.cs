@@ -13,21 +13,21 @@ namespace SiteAvailabilityMonitoring.Controllers
     [Authorize]
     public class AdministrationController : Controller
     {
-        private readonly IDbQuery<Site> _siteQuery;
-        private readonly IDbQuery<Background> _backgroundQuery;
+        private readonly IDbCommand<Site> _siteCommand;
+        private readonly IDbCommand<Background> _backgroundCommand;
 
         private const string IndexActionName = "Index";
 
-        public AdministrationController(IDbQuery<Site> siteQuery, IDbQuery<Background> backgroundQuery)
+        public AdministrationController(IDbCommand<Site> siteCommand, IDbCommand<Background> backgroundCommand)
         {
-            _siteQuery = siteQuery ?? throw new ArgumentNullException(nameof(siteQuery));
-            _backgroundQuery = backgroundQuery ?? throw new ArgumentNullException(nameof(backgroundQuery));
+            _siteCommand = siteCommand ?? throw new ArgumentNullException(nameof(siteCommand));
+            _backgroundCommand = backgroundCommand ?? throw new ArgumentNullException(nameof(backgroundCommand));
         }
 
         public async Task<IActionResult> Index()
         {
-            var applicationSettingModel = await _backgroundQuery.GetAsync(b => b.Type == "Background");
-            var sites = await _siteQuery.GetAllAsync();
+            var applicationSettingModel = await _backgroundCommand.Query.GetAsync(b => b.Type == "Background");
+            var sites = await _siteCommand.Query.GetAllAsync();
             var adminPageModel = new AdministrationPageModel(sites, applicationSettingModel);
 
             return View(adminPageModel);
@@ -43,7 +43,9 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _siteQuery.AddAsync(model);
+                _siteCommand.Add(model);
+                await _siteCommand.Commit();
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -52,13 +54,15 @@ namespace SiteAvailabilityMonitoring.Controllers
 
         public async Task<ActionResult> Delete(string id)
         {
-            await _siteQuery.RemoveAsync(id);
+            _siteCommand.Remove(id);
+            await _siteCommand.Commit();
+
             return RedirectToAction(IndexActionName);
         }
 
         public async Task<ActionResult> Edit(string id)
         {
-            var model = await _siteQuery.GetAsync(s => s.Id == id);
+            var model = await _siteCommand.Query.GetAsync(s => s.Id == id);
             return View(model);
         }
 
@@ -67,7 +71,9 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _siteQuery.UpdateAsync(model);
+                _siteCommand.Update(model);
+                await _siteCommand.Commit();
+
                 return RedirectToAction(IndexActionName);
             }
             return View(model);
@@ -75,7 +81,7 @@ namespace SiteAvailabilityMonitoring.Controllers
 
         public async Task<ActionResult> EditLoopTime()
         {
-            var model = await _backgroundQuery.GetAsync(b => b.Type == "Background");
+            var model = await _backgroundCommand.Query.GetAsync(b => b.Type == "Background");
             return View(model);
         }
 
@@ -84,7 +90,9 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _backgroundQuery.UpdateAsync(model);
+                _backgroundCommand.Update(model);
+                await _backgroundCommand.Commit();
+
                 return RedirectToAction(IndexActionName);
             }
             return View(model);

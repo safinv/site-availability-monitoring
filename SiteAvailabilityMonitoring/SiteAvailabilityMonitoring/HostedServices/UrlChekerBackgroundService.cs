@@ -12,14 +12,14 @@ namespace SiteAvailabilityMonitoring.HostedServices
 {
     public class UrlChekerBackgroundService : BackgroundService
     {
-        private readonly IDbQuery<Background> _backgroundQuery;
-        private readonly IDbQuery<Site> _siteQuery;
+        private readonly IDbCommand<Background> _backgroundCommand;
+        private readonly IDbCommand<Site> _siteCommand;
         private readonly ISiteAvailabilityCheker _siteAvailabilityCheker;
 
-        public UrlChekerBackgroundService(IDbQuery<Background> backgroundQuery, IDbQuery<Site> siteQuery, ISiteAvailabilityCheker siteAvailabilityCheker)
+        public UrlChekerBackgroundService(IDbCommand<Background> backgroundCommand, IDbCommand<Site> siteCommand, ISiteAvailabilityCheker siteAvailabilityCheker)
         {
-            _backgroundQuery = backgroundQuery ?? throw new ArgumentNullException(nameof(backgroundQuery));
-            _siteQuery = siteQuery ?? throw new ArgumentNullException(nameof(siteQuery));
+            _backgroundCommand = backgroundCommand ?? throw new ArgumentNullException(nameof(backgroundCommand));
+            _siteCommand = siteCommand ?? throw new ArgumentNullException(nameof(siteCommand));
             _siteAvailabilityCheker = siteAvailabilityCheker ?? throw new ArgumentNullException(nameof(siteAvailabilityCheker));
         }
 
@@ -27,10 +27,10 @@ namespace SiteAvailabilityMonitoring.HostedServices
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                var time = await _backgroundQuery.GetAsync(b => b.Type == "Background");
+                var time = await _backgroundCommand.Query.GetAsync(b => b.Type == "Background");
                 var span = new TimeSpan(time.Hour, time.Minutes, time.Seconds);
 
-                var urls = await _siteQuery.GetAllAsync();
+                var urls = await _siteCommand.Query.GetAllAsync();
 
                 try
                 {
@@ -50,7 +50,9 @@ namespace SiteAvailabilityMonitoring.HostedServices
             foreach (var site in sites)
             {
                 await _siteAvailabilityCheker.CheckAsync(site);
-                await _siteQuery.UpdateAsync(site);                
+
+                _siteCommand.Update(site);
+                await _siteCommand.Commit();
             }
         }
     }

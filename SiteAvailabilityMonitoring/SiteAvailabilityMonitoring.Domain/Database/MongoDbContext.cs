@@ -1,29 +1,54 @@
-﻿using MongoDB.Driver;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-using SiteAvailabilityMonitoring.Domain.Models;
+using MongoDB.Driver;
+
 using SiteAvailabilityMonitoring.Domain.Settings;
 
 namespace SiteAvailabilityMonitoring.Domain.Database
 {
-    public class MongoDbContext
+    public class MongoDbContext<TEntity>
     {
         private readonly IMongoDatabase _database = null;
+        public IClientSessionHandle Session { get; set; }
+        public MongoClient MongoClient { get; set; }
 
-        public MongoDbContext(IDatabaseSettings settings)
+        private readonly List<Func<Task>> _commands;
+
+        public MongoDbContext(IDatabaseSettings dbSettings)
         {
-            var client = new MongoClient(settings.ConnectionString);
-            if (client != null)
+            MongoClient = new MongoClient(dbSettings.ConnectionString);
+            if (MongoClient != null)
             {
-                _database = client.GetDatabase(settings.DatabaseName);
+                _database = MongoClient.GetDatabase(dbSettings.DatabaseName);
             }
+
+            _commands = new List<Func<Task>>();
         }
 
-        public IMongoCollection<User> Collection
+        public IMongoCollection<TEntity> Collection => _database.GetCollection<TEntity>(typeof(TEntity).Name);
+
+        public async Task<int> SaveChanges()
         {
-            get
+            using (Session = await MongoClient.StartSessionAsync())
             {
-                return _database.GetCollection<User>("Users");
+                Session.StartTransaction();
+
+                var commandTasks = _commands.Select(c => c());
+
+                await Task.WhenAll(commandTasks);
+
+                await Session.CommitTransactionAsync();
             }
+
+            return _commands.Count;
+        }
+
+        public void AddCommand(Func<Task> func)
+        {
+            _commands.Add(func);
         }
     }
 }

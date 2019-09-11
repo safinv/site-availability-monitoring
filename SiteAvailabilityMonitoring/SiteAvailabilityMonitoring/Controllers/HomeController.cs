@@ -12,16 +12,16 @@ namespace SiteAvailabilityMonitoring.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IDbQuery<Site> _siteQuery;
+        private readonly IDbCommand<Site> _siteCommand;
 
-        public HomeController(IDbQuery<Site> siteQuery)
+        public HomeController(IDbCommand<Site> siteCommand)
         {
-            _siteQuery = siteQuery ?? throw new ArgumentNullException(nameof(siteQuery));
+            _siteCommand = siteCommand ?? throw new ArgumentNullException(nameof(siteCommand));
         }
 
         public async Task<IActionResult> Index()
         {
-            var models = await _siteQuery.GetAllAsync();
+            var models = await _siteCommand.Query.GetAllAsync();
             return View(models);
         }
 
