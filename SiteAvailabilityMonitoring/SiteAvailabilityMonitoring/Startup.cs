@@ -22,7 +22,7 @@ namespace SiteAvailabilityMonitoring
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<ISiteRepository, SiteRepository>(provider => new SiteRepository(_configuration.GetConnectionString("NpgsqlDatabase")));
+            services.AddSingleton<ISiteRepository, SiteRepository>(provider => new SiteRepository(_configuration.GetConnectionString("NpgsqlDatabase")));
             services.AddSingleton<ISiteManager, SiteManager>();
             services.AddHttpClient<SiteCheckerClient>();
             
