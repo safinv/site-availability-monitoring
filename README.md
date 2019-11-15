@@ -3,6 +3,6 @@
 Interview project. 
 
 Here are used:
-- Core 2.2 MVC
-- Razor
-- MongoDB
+- Core 3.0
+- Npgsql
+- Dapper

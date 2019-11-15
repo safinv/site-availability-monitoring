@@ -1,85 +1,55 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
-using SiteAvailabilityMonitoring.Domain.Database;
-using SiteAvailabilityMonitoring.Domain.Database.Contracts;
-using SiteAvailabilityMonitoring.Domain.Settings;
-using SiteAvailabilityMonitoring.HostedServices;
-using SiteAvailabilityMonitoring.Infrastructure.Services;
-using SiteAvailabilityMonitoring.Infrastructure.Services.Contracts;
-
-using IHostedService = Microsoft.Extensions.Hosting.IHostedService;
+using SiteAvailabilityMonitoring.DataAccess.Implementations;
+using SiteAvailabilityMonitoring.Domain;
+using SiteAvailabilityMonitoring.Domain.DataAccessPoint;
 
 namespace SiteAvailabilityMonitoring
 {
     public class Startup
     {
+        private readonly IConfiguration _configuration;
+
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            _configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)));
-
-            services.AddSingleton<IDatabaseSettings>(dbs => dbs.GetRequiredService<IOptions<DatabaseSettings>>().Value);
-
-            services.Configure<CookiePolicyOptions>(options =>
+            services.AddTransient<ISiteRepository, SiteRepository>(provider => new SiteRepository(_configuration.GetConnectionString("NpgsqlDatabase")));
+            services.AddSingleton<ISiteManager, SiteManager>();
+            services.AddHttpClient<SiteCheckerClient>();
+            
+            services.AddControllers();
+            
+            services.AddSwaggerGen(c =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
-
-            services.AddTransient(typeof(IDbRequest<>), typeof(DbRequest<>));
-            services.AddTransient(typeof(IDbQuery<>), typeof(DbQuery<>));
-
-            services.AddSingleton<IHostedService, UrlChekerBackgroundService>();
-
-            services.AddHttpClient<ISiteAvailabilityCheker, SiteAvailabilityCheker>();
-
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.LoginPath = new PathString("/Account/Login");
-                });
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
+            
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
             {
-                app.UseExceptionHandler("/Home/Error");
-            }
-
-            app.UseStaticFiles();
-            app.UseCookiePolicy();
-
-            app.UseAuthentication();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.RoutePrefix = string.Empty;
             });
+
+            app.UseRouting();
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }
