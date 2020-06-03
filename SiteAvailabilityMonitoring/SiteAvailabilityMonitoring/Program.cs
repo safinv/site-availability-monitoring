@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using SiteAvailabilityMonitoring.Extensions;
 
 namespace SiteAvailabilityMonitoring
 {
@@ -7,7 +8,7 @@ namespace SiteAvailabilityMonitoring
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args).Build().ApplyMigrate().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

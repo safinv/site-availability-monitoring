@@ -4,11 +4,10 @@ using System.Threading.Tasks;
 
 namespace SiteAvailabilityMonitoring.Domain
 {
-    public class SiteCheckerClient
+    public class WebsiteCheckerClient
     {
         private readonly HttpClient _httpClient;
-
-        public SiteCheckerClient(HttpClient httpClient)
+        public WebsiteCheckerClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }

@@ -1,6 +1,6 @@
-﻿namespace SiteAvailabilityMonitoring.Entities.DboModels
+﻿namespace SiteAvailabilityMonitoring.Entities.DbModels
 {
-    public class Site
+    public class Website
     {
         public int Id { get; set; }
         public string Address { get; set; }

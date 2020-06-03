@@ -1,3 +1,5 @@
+using FluentMigrator.Runner;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -6,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
 using SiteAvailabilityMonitoring.DataAccess.Implementations;
+using SiteAvailabilityMonitoring.DataAccess.Migrations;
 using SiteAvailabilityMonitoring.Domain;
 using SiteAvailabilityMonitoring.Domain.DataAccessPoint;
 
@@ -22,9 +25,18 @@ namespace SiteAvailabilityMonitoring
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<ISiteRepository, SiteRepository>(provider => new SiteRepository(_configuration.GetConnectionString("NpgsqlDatabase")));
-            services.AddSingleton<ISiteManager, SiteManager>();
-            services.AddHttpClient<SiteCheckerClient>();
+            services.AddSingleton<IWebsiteRepository, WebsiteRepository>(provider => new WebsiteRepository(_configuration.GetConnectionString("NpgsqlDatabase")));
+            services.AddSingleton<IWebsiteManager, WebsiteManager>();
+            services.AddHttpClient<WebsiteCheckerClient>();
+
+            services.AddFluentMigratorCore()
+                .ConfigureRunner(builder =>
+                {
+                    builder.AddPostgres();
+                    builder.WithGlobalConnectionString(_configuration.GetConnectionString("NpgsqlDatabase"));
+                    builder.ScanIn(typeof(InitMigration).Assembly).For.Migrations();
+                })
+                .AddLogging(builder => builder.AddFluentMigratorConsole());
             
             services.AddControllers();
             

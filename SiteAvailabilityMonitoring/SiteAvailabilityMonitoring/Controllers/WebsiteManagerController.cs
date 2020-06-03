@@ -11,20 +11,20 @@ using SiteAvailabilityMonitoring.Entities.Models;
 namespace SiteAvailabilityMonitoring.Controllers
 {
     [Route("sites")]
-    public class SiteManagerController : Controller
+    public class WebsiteManagerController : Controller
     {
-        private readonly ISiteManager _siteManager;
+        private readonly IWebsiteManager _websiteManager;
         
-        public SiteManagerController(ISiteManager siteManager)
+        public WebsiteManagerController(IWebsiteManager websiteManager)
         {
-            _siteManager = siteManager;
+            _websiteManager = websiteManager;
         }
 
         [HttpGet("all")]
-        public async Task<IEnumerable<SiteObjectGetDto>> GetAll()
+        public async Task<IEnumerable<WebsiteObjectGetDto>> GetAll()
         {
-            var sites = await _siteManager.GetAllAsync();
-            return sites.Select(site => new SiteObjectGetDto
+            var sites = await _websiteManager.GetAllAsync();
+            return sites.Select(site => new WebsiteObjectGetDto
             {
                 Address = site.Address,
                 Status = site.Status ? "nice" : "bad"
@@ -32,16 +32,16 @@ namespace SiteAvailabilityMonitoring.Controllers
         }
         
         [HttpPost("create")]
-        public async Task<IActionResult> AddSite([FromBody] SiteObjectCreateDto dto)
+        public async Task<IActionResult> AddWebsite([FromBody] WebsiteObjectCreateDto dto)
         {
-            await _siteManager.CreateAsync(new SiteModel(dto.Address));
+            await _websiteManager.CreateAsync(new WebsiteModel(dto.Address));
             return Ok();
         }
 
         [HttpGet("check")]
         public async Task<IActionResult> Check()
         {
-            await _siteManager.CheckOnAccessAndUpdate();
+            await _websiteManager.CheckOnAccessAndUpdate();
             return Ok();
         }
     }

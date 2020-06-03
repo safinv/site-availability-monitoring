@@ -5,11 +5,11 @@ using SiteAvailabilityMonitoring.Entities.Models;
 
 namespace SiteAvailabilityMonitoring.Domain
 {
-    public interface ISiteManager
+    public interface IWebsiteManager
     {
-        Task<IEnumerable<SiteModel>> GetAllAsync();
+        Task<IEnumerable<WebsiteModel>> GetAllAsync();
 
-        Task CreateAsync(SiteModel model);
+        Task CreateAsync(WebsiteModel websiteModel);
 
         Task CheckOnAccessAndUpdate();
     }

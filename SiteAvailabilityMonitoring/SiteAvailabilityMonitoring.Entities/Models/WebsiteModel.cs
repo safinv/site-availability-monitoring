@@ -2,11 +2,11 @@
 
 namespace SiteAvailabilityMonitoring.Entities.Models
 {
-    public class SiteModel
+    public class WebsiteModel
     {
-        public SiteModel(string name, bool status = default)
+        public WebsiteModel(string address, bool status = default)
         {
-            Address = name ?? throw new ArgumentNullException();
+            Address = address ?? throw new ArgumentNullException(nameof(address));
             Status = status;
         }
 
