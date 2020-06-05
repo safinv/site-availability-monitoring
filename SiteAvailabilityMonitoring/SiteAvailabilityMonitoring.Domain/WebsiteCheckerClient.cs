@@ -2,6 +2,8 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
+using SiteAvailabilityMonitoring.Entities.DbModels;
+
 namespace SiteAvailabilityMonitoring.Domain
 {
     public class WebsiteCheckerClient
@@ -12,16 +14,16 @@ namespace SiteAvailabilityMonitoring.Domain
             _httpClient = httpClient;
         }
 
-        public async Task<bool> CheckAsync(string address)
+        public async Task<Status> CheckAsync(string address)
         {
             try
             {
                 var result = await _httpClient.GetAsync(address);
-                return result.IsSuccessStatusCode;
+                return result.IsSuccessStatusCode ? Status.Enable : Status.Disable;
             }
             catch (Exception)
             {
-                return false;
+                return Status.Disable;
             }
         }
     }

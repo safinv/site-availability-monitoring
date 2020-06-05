@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 using SiteAvailabilityMonitoring.Domain;
+using SiteAvailabilityMonitoring.Domain.Contracts;
 using SiteAvailabilityMonitoring.Dto;
-using SiteAvailabilityMonitoring.Entities.Models;
+using SiteAvailabilityMonitoring.Entities.DbModels;
 
 namespace SiteAvailabilityMonitoring.Controllers
 {
@@ -23,18 +24,19 @@ namespace SiteAvailabilityMonitoring.Controllers
         [HttpGet("all")]
         public async Task<IEnumerable<WebsiteObjectGetDto>> GetAll()
         {
-            var sites = await _websiteManager.GetAllAsync();
-            return sites.Select(site => new WebsiteObjectGetDto
+            var websites = await _websiteManager.GetAllAsync();
+            return websites.Select(website => new WebsiteObjectGetDto
             {
-                Address = site.Address,
-                Status = site.Status ? "nice" : "bad"
+                Id = website.Id,
+                Address = website.Address,
+                Status = website.Status.ToString()
             });
         }
         
         [HttpPost("create")]
         public async Task<IActionResult> AddWebsite([FromBody] WebsiteObjectCreateDto dto)
         {
-            await _websiteManager.CreateAsync(new WebsiteModel(dto.Address));
+            await _websiteManager.CreateAsync(dto.Address);
             return Ok();
         }
 

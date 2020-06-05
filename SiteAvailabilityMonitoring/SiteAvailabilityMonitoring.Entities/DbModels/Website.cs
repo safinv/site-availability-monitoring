@@ -1,9 +1,36 @@
-﻿namespace SiteAvailabilityMonitoring.Entities.DbModels
+﻿using System;
+
+namespace SiteAvailabilityMonitoring.Entities.DbModels
 {
     public class Website
     {
-        public int Id { get; set; }
-        public string Address { get; set; }
-        public bool Status { get; set; }
+        public Website(long id, string address, string status)
+        {
+            Id = id;
+            Address = address;
+            Status = Enum.Parse<Status>(status);
+        }
+
+        public Website(string address, Status status)
+        {
+            Address = address ?? throw new ArgumentNullException(nameof(address));
+            Status = status;
+        }
+
+        public long Id { get; private set; }
+        public string Address { get; private set;}
+        public Status Status { get; private set;}
+
+        public string StatusAsString => Status.ToString();
+
+        public void SetStatus(Status status)
+        {
+            Status = status;
+        }
+        
+        public void SetAddress(string address)
+        {
+            Address = address;
+        }
     }
 }

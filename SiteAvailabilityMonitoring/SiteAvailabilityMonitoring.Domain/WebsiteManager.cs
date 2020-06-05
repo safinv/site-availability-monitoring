@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using SiteAvailabilityMonitoring.Domain.Contracts;
 using SiteAvailabilityMonitoring.Domain.DataAccessPoint;
 using SiteAvailabilityMonitoring.Entities.DbModels;
-using SiteAvailabilityMonitoring.Entities.Models;
+
 
 namespace SiteAvailabilityMonitoring.Domain
 {
@@ -20,20 +20,16 @@ namespace SiteAvailabilityMonitoring.Domain
             _websiteCheckerClient = websiteCheckerClient;
         }
 
-        public async Task<IEnumerable<WebsiteModel>> GetAllAsync()
+        public async Task<IEnumerable<Website>> GetAllAsync()
         {
             var sites = await _websiteRepository.GetAllAsync();
-            return sites.Select(elem => new WebsiteModel(elem.Address, elem.Status));
+            return sites;
         }
 
-        public async Task CreateAsync(WebsiteModel websiteModel)
+        public async Task CreateAsync(string address)
         {
-            var status = await _websiteCheckerClient.CheckAsync(websiteModel.Address);
-            var website = new Website
-            {
-                Address = websiteModel.Address,
-                Status = status
-            };
+            var status = await _websiteCheckerClient.CheckAsync(address);
+            var website = new Website(address, status);
 
             await _websiteRepository.CreateAsync(website);
         }
@@ -46,7 +42,7 @@ namespace SiteAvailabilityMonitoring.Domain
                     var isAccessed = await _websiteCheckerClient.CheckAsync(website.Address);
                     if (isAccessed != website.Status)
                     {
-                        website.Status = isAccessed;
+                        website.SetStatus(isAccessed);
                         await _websiteRepository.UpdateAsync(website);
                     }
                 }))

@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using SiteAvailabilityMonitoring.DataAccess.Implementations;
 using SiteAvailabilityMonitoring.DataAccess.Migrations;
 using SiteAvailabilityMonitoring.Domain;
+using SiteAvailabilityMonitoring.Domain.Contracts;
 using SiteAvailabilityMonitoring.Domain.DataAccessPoint;
 
 namespace SiteAvailabilityMonitoring
