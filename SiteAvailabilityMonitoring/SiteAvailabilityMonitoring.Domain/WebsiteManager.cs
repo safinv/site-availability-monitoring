@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SiteAvailabilityMonitoring.Domain.Contracts;
 using SiteAvailabilityMonitoring.Domain.DataAccessPoint;
-using SiteAvailabilityMonitoring.Entities.DbModels;
+using SiteAvailabilityMonitoring.Entities;
 
 
 namespace SiteAvailabilityMonitoring.Domain

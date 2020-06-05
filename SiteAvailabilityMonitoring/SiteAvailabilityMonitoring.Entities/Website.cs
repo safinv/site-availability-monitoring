@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SiteAvailabilityMonitoring.Entities.DbModels
+namespace SiteAvailabilityMonitoring.Entities
 {
     public class Website
     {

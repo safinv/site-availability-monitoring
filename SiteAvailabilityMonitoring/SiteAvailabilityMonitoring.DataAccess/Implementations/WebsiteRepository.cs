@@ -6,7 +6,7 @@ using Dapper;
 using Npgsql;
 
 using SiteAvailabilityMonitoring.Domain.DataAccessPoint;
-using SiteAvailabilityMonitoring.Entities.DbModels;
+using SiteAvailabilityMonitoring.Entities;
 
 namespace SiteAvailabilityMonitoring.DataAccess.Implementations
 {
@@ -21,7 +21,7 @@ namespace SiteAvailabilityMonitoring.DataAccess.Implementations
         public async Task<IEnumerable<Website>> GetAllAsync()
         {
             await using var connection = new NpgsqlConnection(_connectionString);
-            var query = "SELECT id, address, status FROM sites";
+            var query = "SELECT id, address, status FROM websites";
             var result = await connection.QueryAsync<Website>(query);
             
             return result;
@@ -30,7 +30,7 @@ namespace SiteAvailabilityMonitoring.DataAccess.Implementations
         public async Task CreateAsync(Website website)
         {
             await using var connection = new NpgsqlConnection(_connectionString);
-            var query = "INSERT INTO sites (address, status) VALUES (@Address, @StatusAsString::e_status)";
+            var query = "INSERT INTO websites (address, status) VALUES (@Address, @StatusAsString::e_status)";
 
             await connection.ExecuteAsync(query, website);
         }
@@ -38,7 +38,7 @@ namespace SiteAvailabilityMonitoring.DataAccess.Implementations
         public async Task UpdateAsync(Website website)
         {
             await using var connection = new NpgsqlConnection(_connectionString);
-            var query = "UPDATE sites SET status = @StatusAsString::e_status WHERE id = @Id";
+            var query = "UPDATE websites SET status = @StatusAsString::e_status WHERE id = @Id";
 
             await connection.ExecuteAsync(query, website);
         }

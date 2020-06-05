@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-
-using SiteAvailabilityMonitoring.Entities.DbModels;
+using SiteAvailabilityMonitoring.Entities;
 
 namespace SiteAvailabilityMonitoring.Domain
 {

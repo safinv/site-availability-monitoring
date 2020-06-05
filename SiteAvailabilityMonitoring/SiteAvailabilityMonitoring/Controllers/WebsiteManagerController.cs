@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using SiteAvailabilityMonitoring.Domain;
 using SiteAvailabilityMonitoring.Domain.Contracts;
 using SiteAvailabilityMonitoring.Dto;
-using SiteAvailabilityMonitoring.Entities.DbModels;
 
 namespace SiteAvailabilityMonitoring.Controllers
 {
@@ -29,7 +28,7 @@ namespace SiteAvailabilityMonitoring.Controllers
             {
                 Id = website.Id,
                 Address = website.Address,
-                Status = website.Status.ToString()
+                Status = website.StatusAsString
             });
         }
         
