@@ -27,10 +27,5 @@ namespace SiteAvailabilityMonitoring.Entities
         {
             Status = status;
         }
-        
-        public void SetAddress(string address)
-        {
-            Address = address;
-        }
     }
 }
