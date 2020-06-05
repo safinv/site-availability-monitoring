@@ -21,7 +21,7 @@ namespace SiteAvailabilityMonitoring.Entities
         public string Address { get; private set;}
         public Status Status { get; private set;}
 
-        public string StatusAsString => Status.ToString();
+        public string StatusAsString => Status.ToString().ToLower();
 
         public void SetStatus(Status status)
         {

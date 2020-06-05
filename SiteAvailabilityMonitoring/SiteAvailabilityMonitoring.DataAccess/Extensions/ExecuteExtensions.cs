@@ -8,7 +8,7 @@ namespace SiteAvailabilityMonitoring.DataAccess.Extensions
         public static void CreateEnum<T>(this FluentMigrator.Builders.Execute.IExecuteExpressionRoot execute, string enumName = null) where T : Enum
         {
             var type = typeof(T);
-            var enumFormatValues = Enum.GetValues(type).Cast<T>().Select(elem => $"'{elem.ToString()}'");
+            var enumFormatValues = Enum.GetValues(type).Cast<T>().Select(elem => $"'{elem.ToString().ToLower()}'");
 
             var enumValues = string.Join(",", enumFormatValues);
             var enumTableName = enumName ?? type.Name;
