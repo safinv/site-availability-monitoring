@@ -16,6 +16,13 @@ namespace SiteAvailabilityMonitoring.Entities
             Address = address ?? throw new ArgumentNullException(nameof(address));
             Status = status;
         }
+        
+        public Website(long id, string address, Status status)
+        {
+            Id = id;
+            Address = address ?? throw new ArgumentNullException(nameof(address));
+            Status = status;
+        }
 
         public long Id { get; private set; }
         public string Address { get; private set;}

@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Mvc;
 
-using SiteAvailabilityMonitoring.Domain;
 using SiteAvailabilityMonitoring.Domain.Contracts;
 using SiteAvailabilityMonitoring.Dto;
 
@@ -38,8 +37,15 @@ namespace SiteAvailabilityMonitoring.Controllers
             await _websiteManager.CreateAsync(dto.Address);
             return Ok();
         }
+        
+        [HttpPut("edit")]
+        public async Task<IActionResult> EditWebsite([FromBody] WebsiteObjectEditDto dto)
+        {
+            await _websiteManager.EditAsync(dto.Id, dto.Address);
+            return Ok();
+        }
 
-        [HttpGet("check")]
+        [HttpPost("check")]
         public async Task<IActionResult> Check()
         {
             await _websiteManager.CheckOnAccessAndUpdate();

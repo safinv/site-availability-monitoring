@@ -37,7 +37,7 @@ namespace SiteAvailabilityMonitoring.DataAccess.Implementations
         public async Task UpdateAsync(Website website)
         {
             await using var connection = _connectionFactory.CreateConnection();
-            var query = @$"UPDATE websites SET status = @StatusAsString::e_status WHERE id = @Id";
+            var query = @$"UPDATE websites SET address = @Address, status = @StatusAsString::e_status WHERE id = @Id";
 
             await connection.ExecuteAsync(query, website);
         }

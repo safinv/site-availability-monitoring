@@ -10,6 +10,8 @@ namespace SiteAvailabilityMonitoring.Domain.Contracts
 
         Task CreateAsync(string address);
 
+        Task EditAsync(long id, string address);
+
         Task CheckOnAccessAndUpdate();
     }
 }

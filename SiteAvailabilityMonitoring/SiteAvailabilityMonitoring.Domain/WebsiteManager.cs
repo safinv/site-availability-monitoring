@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using SiteAvailabilityMonitoring.Domain.Contracts;
 using SiteAvailabilityMonitoring.Domain.DataAccessPoint;
 using SiteAvailabilityMonitoring.Entities;
-
 
 namespace SiteAvailabilityMonitoring.Domain
 {
@@ -32,6 +32,14 @@ namespace SiteAvailabilityMonitoring.Domain
             var website = new Website(address, status);
 
             await _websiteRepository.CreateAsync(website);
+        }
+
+        public async Task EditAsync(long id, string address)
+        {
+            var status = await _websiteCheckerClient.CheckAsync(address);
+            var website = new Website(id, address, status);
+
+            await _websiteRepository.UpdateAsync(website);
         }
 
         public async Task CheckOnAccessAndUpdate()

@@ -6,12 +6,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using SiteAvailabilityMonitoring.BackgroundServices;
 using SiteAvailabilityMonitoring.DataAccess.Base;
 using SiteAvailabilityMonitoring.DataAccess.Implementations;
 using SiteAvailabilityMonitoring.DataAccess.Migrations;
 using SiteAvailabilityMonitoring.Domain;
 using SiteAvailabilityMonitoring.Domain.Contracts;
 using SiteAvailabilityMonitoring.Domain.DataAccessPoint;
+using SiteAvailabilityMonitoring.Options;
 
 namespace SiteAvailabilityMonitoring
 {
@@ -32,6 +34,9 @@ namespace SiteAvailabilityMonitoring
             services.AddSingleton<IWebsiteManager, WebsiteManager>();
             services.AddHttpClient<WebsiteCheckerClient>();
 
+            services.Configure<CheckerOptions>(_configuration.GetSection("CheckerOutbox"));
+            services.AddHostedService<CheckerBackgroundService>();
+            
             services.AddControllers();
             
             services.AddSwaggerGen(c =>
