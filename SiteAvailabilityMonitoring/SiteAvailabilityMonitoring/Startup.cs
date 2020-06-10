@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-
+using SiteAvailabilityMonitoring.DataAccess.Base;
 using SiteAvailabilityMonitoring.DataAccess.Implementations;
 using SiteAvailabilityMonitoring.DataAccess.Migrations;
 using SiteAvailabilityMonitoring.Domain;
@@ -26,19 +26,12 @@ namespace SiteAvailabilityMonitoring
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IWebsiteRepository, WebsiteRepository>(provider => new WebsiteRepository(_configuration.GetConnectionString("NpgsqlDatabase")));
+            ConfigureDatabase(services);
+            
+            services.AddSingleton<IWebsiteRepository, WebsiteRepository>();
             services.AddSingleton<IWebsiteManager, WebsiteManager>();
             services.AddHttpClient<WebsiteCheckerClient>();
 
-            services.AddFluentMigratorCore()
-                .ConfigureRunner(builder =>
-                {
-                    builder.AddPostgres();
-                    builder.WithGlobalConnectionString(_configuration.GetConnectionString("NpgsqlDatabase"));
-                    builder.ScanIn(typeof(InitMigration).Assembly).For.Migrations();
-                })
-                .AddLogging(builder => builder.AddFluentMigratorConsole());
-            
             services.AddControllers();
             
             services.AddSwaggerGen(c =>
@@ -63,6 +56,21 @@ namespace SiteAvailabilityMonitoring
 
             app.UseRouting();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+        }
+
+        private void ConfigureDatabase(IServiceCollection services)
+        {
+            services.AddSingleton<IConnectionFactory>(
+                new ConnectionFactory(_configuration.GetConnectionString("NpgsqlDatabase")));
+            
+            services.AddFluentMigratorCore()
+                .ConfigureRunner(builder =>
+                {
+                    builder.AddPostgres();
+                    builder.WithGlobalConnectionString(_configuration.GetConnectionString("NpgsqlDatabase"));
+                    builder.ScanIn(typeof(InitMigration).Assembly).For.Migrations();
+                })
+                .AddLogging(builder => builder.AddFluentMigratorConsole());
         }
     }
 }
