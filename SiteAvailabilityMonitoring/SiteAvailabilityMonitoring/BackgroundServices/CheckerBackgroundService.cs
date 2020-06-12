@@ -28,12 +28,12 @@ namespace SiteAvailabilityMonitoring.BackgroundServices
             var (scopeFactory, stoppingToken) = ((IServiceScopeFactory, CancellationToken)) obj;
             using var scope = scopeFactory.CreateScope();
 
-            var service = scope.ServiceProvider.GetRequiredService<IWebsiteManager>();
+            var websiteManager = scope.ServiceProvider.GetRequiredService<IWebsiteManager>();
             var options = scope.ServiceProvider.GetRequiredService<IOptions<CheckerOptions>>().Value;
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                await service.CheckOnAccessAndUpdate();
+                await websiteManager.CheckAllOnAccessAndUpdate();
                 await Task.Delay(options.DelayTimeSpan, stoppingToken);
             }
         }

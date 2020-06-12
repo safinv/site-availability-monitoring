@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+
 using SiteAvailabilityMonitoring.BackgroundServices;
 using SiteAvailabilityMonitoring.DataAccess.Base;
 using SiteAvailabilityMonitoring.DataAccess.Implementations;
@@ -36,9 +37,11 @@ namespace SiteAvailabilityMonitoring
 
             services.Configure<CheckerOptions>(_configuration.GetSection("CheckerOutbox"));
             services.AddHostedService<CheckerBackgroundService>();
+
+            services.AddRazorPages();
+            services.AddServerSideBlazor();
             
-            services.AddControllers();
-            
+            services.AddControllers();            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
@@ -59,8 +62,16 @@ namespace SiteAvailabilityMonitoring
                 c.RoutePrefix = string.Empty;
             });
 
+            app.UseHttpsRedirection();
+            
+            app.UseStaticFiles();
             app.UseRouting();
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapBlazorHub();
+                endpoints.MapFallbackToPage("/_Host");
+                
+            });
         }
 
         private void ConfigureDatabase(IServiceCollection services)

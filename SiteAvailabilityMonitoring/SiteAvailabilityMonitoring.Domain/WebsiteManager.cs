@@ -42,7 +42,7 @@ namespace SiteAvailabilityMonitoring.Domain
             await _websiteRepository.UpdateAsync(website);
         }
 
-        public async Task CheckOnAccessAndUpdate()
+        public async Task CheckAllOnAccessAndUpdate()
         {
             var websites = await _websiteRepository.GetAllAsync();
             var tasks = websites.Select(website => Task.Run(async () =>

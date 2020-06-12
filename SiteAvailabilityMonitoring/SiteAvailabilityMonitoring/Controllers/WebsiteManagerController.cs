@@ -48,7 +48,7 @@ namespace SiteAvailabilityMonitoring.Controllers
         [HttpPost("check")]
         public async Task<IActionResult> Check()
         {
-            await _websiteManager.CheckOnAccessAndUpdate();
+            await _websiteManager.CheckAllOnAccessAndUpdate();
             return Ok();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+
 using SiteAvailabilityMonitoring.Entities;
 
 namespace SiteAvailabilityMonitoring.Domain.Contracts
@@ -12,6 +13,6 @@ namespace SiteAvailabilityMonitoring.Domain.Contracts
 
         Task EditAsync(long id, string address);
 
-        Task CheckOnAccessAndUpdate();
+        Task CheckAllOnAccessAndUpdate();
     }
 }
