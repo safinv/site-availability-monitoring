@@ -2,7 +2,7 @@
 
 namespace SiteAvailabilityMonitoring.Dto
 {
-    public class WebsiteObjectEditDto
+    public class EditWebsite
     {
         [JsonProperty("id")]
         public long Id { get; set; }

@@ -20,10 +20,10 @@ namespace SiteAvailabilityMonitoring.Controllers
         }
 
         [HttpGet("all")]
-        public async Task<IEnumerable<WebsiteObjectGetDto>> GetAll()
+        public async Task<IEnumerable<GetWebsite>> GetAll()
         {
             var websites = await _websiteManager.GetAllAsync();
-            return websites.Select(website => new WebsiteObjectGetDto
+            return websites.Select(website => new GetWebsite
             {
                 Id = website.Id,
                 Address = website.Address,
@@ -32,16 +32,16 @@ namespace SiteAvailabilityMonitoring.Controllers
         }
         
         [HttpPost("create")]
-        public async Task<IActionResult> AddWebsite([FromBody] WebsiteObjectCreateDto dto)
+        public async Task<IActionResult> AddWebsite([FromBody] CreateWebsite model)
         {
-            await _websiteManager.CreateAsync(dto.Address);
+            await _websiteManager.CreateAsync(model.Addresses);
             return Ok();
         }
         
         [HttpPut("edit")]
-        public async Task<IActionResult> EditWebsite([FromBody] WebsiteObjectEditDto dto)
+        public async Task<IActionResult> EditWebsite([FromBody] EditWebsite model)
         {
-            await _websiteManager.EditAsync(dto.Id, dto.Address);
+            await _websiteManager.EditAsync(model.Id, model.Address);
             return Ok();
         }
 

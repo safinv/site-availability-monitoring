@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,12 +25,16 @@ namespace SiteAvailabilityMonitoring.Domain
             return sites;
         }
 
-        public async Task CreateAsync(string address)
+        public async Task CreateAsync(List<string> addresses)
         {
-            var status = await _websiteCheckerClient.CheckAsync(address);
-            var website = new Website(address, status);
+            foreach (var address in addresses)
+            {
+                var cleanAddress = address.TrimEnd('/');
+                var status = await _websiteCheckerClient.CheckAsync(cleanAddress);
+                var website = new Website(address, status);
 
-            await _websiteRepository.CreateAsync(website);
+                await _websiteRepository.CreateAsync(website);
+            }
         }
 
         public async Task EditAsync(long id, string address)
@@ -45,23 +48,19 @@ namespace SiteAvailabilityMonitoring.Domain
         public async Task CheckAllOnAccessAndUpdate()
         {
             var websites = await _websiteRepository.GetAllAsync();
-            var tasks = websites.Select(website => Task.Run(async () =>
-                {
-                    var isAccessed = await _websiteCheckerClient.CheckAsync(website.Address);
-                    if (isAccessed != website.Status)
-                    {
-                        website.SetStatus(isAccessed);
-                        await _websiteRepository.UpdateAsync(website);
-                    }
-                }))
-                .ToList();
+            var tasks = websites.Select(UpdateStatus).ToList();
 
-            var continuation = Task.WhenAll(tasks);
-            try {
-                continuation.Wait();
+            await Task.WhenAll(tasks);
+        }
+
+        private async Task UpdateStatus(Website website)
+        {
+            var isAccessed = await _websiteCheckerClient.CheckAsync(website.Address);
+            if (isAccessed != website.Status)
+            {
+                website.SetStatus(isAccessed);
+                await _websiteRepository.UpdateAsync(website);
             }
-            catch (AggregateException)
-            { }
         }
     }
 }

@@ -1,5 +1,3 @@
-using FluentMigrator.Runner;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,9 +6,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
 using SiteAvailabilityMonitoring.BackgroundServices;
-using SiteAvailabilityMonitoring.DataAccess.Base;
+using SiteAvailabilityMonitoring.DataAccess;
 using SiteAvailabilityMonitoring.DataAccess.Implementations;
-using SiteAvailabilityMonitoring.DataAccess.Migrations;
 using SiteAvailabilityMonitoring.Domain;
 using SiteAvailabilityMonitoring.Domain.Contracts;
 using SiteAvailabilityMonitoring.Domain.DataAccessPoint;
@@ -29,22 +26,23 @@ namespace SiteAvailabilityMonitoring
 
         public void ConfigureServices(IServiceCollection services)
         {
-            ConfigureDatabase(services);
+            services.ConfigureDatabase(_configuration);
             
-            services.AddSingleton<IWebsiteRepository, WebsiteRepository>();
-            services.AddSingleton<IWebsiteManager, WebsiteManager>();
-            services.AddHttpClient<WebsiteCheckerClient>();
+            services
+                .AddSingleton<IWebsiteRepository, WebsiteRepository>()
+                .AddSingleton<IWebsiteManager, WebsiteManager>()
+                .AddHttpClient<WebsiteCheckerClient>();
 
-            services.Configure<CheckerOptions>(_configuration.GetSection("CheckerOutbox"));
+            services.Configure<CheckerOptions>(_configuration.GetSection("CheckerOptions"));
+            
             services.AddHostedService<CheckerBackgroundService>();
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            
-            services.AddControllers();            
+            services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Site Availability Monitoring", Version = "v1" });
             });
         }
 
@@ -54,39 +52,35 @@ namespace SiteAvailabilityMonitoring
             {
                 app.UseDeveloperExceptionPage();
             }
-            
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-                c.RoutePrefix = string.Empty;
-            });
+
+            ConfigureSwagger(app);
 
             app.UseHttpsRedirection();
             
             app.UseStaticFiles();
             app.UseRouting();
+            
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
-                
             });
         }
 
-        private void ConfigureDatabase(IServiceCollection services)
+        private static void ConfigureSwagger(IApplicationBuilder app)
         {
-            services.AddSingleton<IConnectionFactory>(
-                new ConnectionFactory(_configuration.GetConnectionString("NpgsqlDatabase")));
+            const string swaggerBasePath = "api";
             
-            services.AddFluentMigratorCore()
-                .ConfigureRunner(builder =>
-                {
-                    builder.AddPostgres();
-                    builder.WithGlobalConnectionString(_configuration.GetConnectionString("NpgsqlDatabase"));
-                    builder.ScanIn(typeof(InitMigration).Assembly).For.Migrations();
-                })
-                .AddLogging(builder => builder.AddFluentMigratorConsole());
+            app.UseSwagger(c =>
+            {
+                c.RouteTemplate = $"{swaggerBasePath}"+"/swagger/{documentName}/swagger.json";
+            });
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint($"/{swaggerBasePath}/swagger/v1/swagger.json", $"APP API");
+                c.RoutePrefix = $"{swaggerBasePath}/swagger";
+            });
         }
     }
 }

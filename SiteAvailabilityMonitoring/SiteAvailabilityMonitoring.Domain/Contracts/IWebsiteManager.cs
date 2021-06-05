@@ -9,7 +9,7 @@ namespace SiteAvailabilityMonitoring.Domain.Contracts
     {
         Task<IEnumerable<Website>> GetAllAsync();
 
-        Task CreateAsync(string address);
+        Task CreateAsync(List<string> addresses);
 
         Task EditAsync(long id, string address);
 
