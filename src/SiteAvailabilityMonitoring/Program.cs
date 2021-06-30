@@ -22,7 +22,7 @@ namespace SiteAvailabilityMonitoring
                 {
                     BaseAddress = new Uri("https://localhost:5010")
                 });
-            
+
             await builder.Build().RunAsync();
         }
     }

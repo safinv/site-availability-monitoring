@@ -49,17 +49,14 @@ namespace SiteAvailabilityMonitoring.Api
             if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
 
             ConfigureSwagger(app);
-            
+
             app.UseRouting();
 
-            app.UseCors(policy => policy.WithOrigins("https://localhost:5001","http://localhost:5000")
+            app.UseCors(policy => policy.WithOrigins("https://localhost:5001", "http://localhost:5000")
                 .AllowAnyMethod()
                 .WithHeaders(HeaderNames.ContentType));
-            
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
 
         private static void ConfigureSwagger(IApplicationBuilder app)

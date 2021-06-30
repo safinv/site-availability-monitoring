@@ -6,28 +6,30 @@
 <div class="container">
     <table class="table table-striped table-bordered">
         <thead>
-            <tr>
-                <th>Url</th>
-                <th>Status</th>
-            </tr>
+        <tr>
+            <th>Url</th>
+            <th>Status</th>
+        </tr>
         </thead>
         <tbody>
-            @foreach (var website in _websites)
-            {
-                <tr>
-                    <td>@website.Address</td>
-                    <td>@website.Status</td>
-                </tr>
-            }
+        @foreach (var website in _websites)
+        {
+            <tr>
+                <td>@website.Address</td>
+                <td>@website.Status</td>
+            </tr>
+        }
         </tbody>
     </table>
 </div>
 
 @code {
-    
+
     private IEnumerable<Website> _websites = new List<Website>();
 
-    protected override async Task OnInitializedAsync() => 
+    protected override async Task OnInitializedAsync()
+    {
         _websites = await Http.GetFromJsonAsync<IEnumerable<Website>>("api/website");
+    }
 
 }
