@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.779
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "git", "git", "{C29A7EEE-443E-4230-8969-93908A4E7861}"
+ProjectSection(SolutionItems) = preProject
+	.gitignore = .gitignore
+	README.md = README.md
+EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteAvailabilityMonitoring", "src\SiteAvailabilityMonitoring\SiteAvailabilityMonitoring.csproj", "{AEA50C14-AC74-427D-B66A-9EE43FF8D90E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteAvailabilityMonitoring.Abstractions", "src\SiteAvailabilityMonitoring.Abstractions\SiteAvailabilityMonitoring.Abstractions.csproj", "{C6B4A11C-B5C5-49B2-A71F-C113956964D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteAvailabilityMonitoring.DataAccess", "src\SiteAvailabilityMonitoring.DataAccess\SiteAvailabilityMonitoring.DataAccess.csproj", "{344A24FB-BE8D-4321-ACAE-427F56CA7969}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteAvailabilityMonitoring.Domain", "src\SiteAvailabilityMonitoring.Domain\SiteAvailabilityMonitoring.Domain.csproj", "{EA8ED934-6221-470A-8C3B-35A643058CD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteAvailabilityMonitoring.Entities", "src\SiteAvailabilityMonitoring.Entities\SiteAvailabilityMonitoring.Entities.csproj", "{A560254F-F057-460A-8DD9-DDA749E4E7AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{FE9E3B0B-C4EA-4947-A04E-571109AE5C63}"
+ProjectSection(SolutionItems) = preProject
+	scripts\up-postgres.cmd = scripts\up-postgres.cmd
+EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AEA50C14-AC74-427D-B66A-9EE43FF8D90E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEA50C14-AC74-427D-B66A-9EE43FF8D90E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEA50C14-AC74-427D-B66A-9EE43FF8D90E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEA50C14-AC74-427D-B66A-9EE43FF8D90E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6B4A11C-B5C5-49B2-A71F-C113956964D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6B4A11C-B5C5-49B2-A71F-C113956964D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6B4A11C-B5C5-49B2-A71F-C113956964D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6B4A11C-B5C5-49B2-A71F-C113956964D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{344A24FB-BE8D-4321-ACAE-427F56CA7969}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{344A24FB-BE8D-4321-ACAE-427F56CA7969}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{344A24FB-BE8D-4321-ACAE-427F56CA7969}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{344A24FB-BE8D-4321-ACAE-427F56CA7969}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA8ED934-6221-470A-8C3B-35A643058CD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA8ED934-6221-470A-8C3B-35A643058CD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA8ED934-6221-470A-8C3B-35A643058CD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA8ED934-6221-470A-8C3B-35A643058CD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A560254F-F057-460A-8DD9-DDA749E4E7AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A560254F-F057-460A-8DD9-DDA749E4E7AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A560254F-F057-460A-8DD9-DDA749E4E7AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A560254F-F057-460A-8DD9-DDA749E4E7AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6A3BFB7E-AD6F-4D2B-ADD8-A9A0E1317347}
+	EndGlobalSection
+EndGlobal

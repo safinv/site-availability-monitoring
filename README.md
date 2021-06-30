@@ -3,6 +3,6 @@
 Interview project. 
 
 Here are used:
-- Core 3.0
-- Npgsql
+- Net5.0
+- Postgres
 - Dapper

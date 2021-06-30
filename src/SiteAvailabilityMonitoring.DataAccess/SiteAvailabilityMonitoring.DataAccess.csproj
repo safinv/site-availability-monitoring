@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SiteAvailabilityMonitoring.Domain\SiteAvailabilityMonitoring.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Dapper" Version="2.0.30" />
+      <PackageReference Include="FluentMigrator" Version="3.2.6" />
+      <PackageReference Include="FluentMigrator.Runner" Version="3.2.6" />
+      <PackageReference Include="Npgsql" Version="4.1.2" />
+    </ItemGroup>
+
+</Project>
