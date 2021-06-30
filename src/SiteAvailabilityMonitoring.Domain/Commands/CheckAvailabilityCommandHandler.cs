@@ -7,14 +7,14 @@ using SiteAvailabilityMonitoring.Entities;
 
 namespace SiteAvailabilityMonitoring.Domain.Commands
 {
-    public class CheckAvailabilityCommandHandler 
+    public class CheckAvailabilityCommandHandler
         : IRequestHandler<CheckAvailabilityCommand>
     {
         private readonly IWebsiteRepository _websiteRepository;
         private readonly WebsiteCheckerClient _websiteCheckerClient;
 
         public CheckAvailabilityCommandHandler(
-            IWebsiteRepository websiteRepository, 
+            IWebsiteRepository websiteRepository,
             WebsiteCheckerClient websiteCheckerClient)
         {
             _websiteRepository = websiteRepository;
@@ -27,10 +27,10 @@ namespace SiteAvailabilityMonitoring.Domain.Commands
             var tasks = websites.Select(UpdateStatus).ToList();
 
             await Task.WhenAll(tasks);
-            
+
             return Unit.Value;
         }
-        
+
         private async Task UpdateStatus(DbWebsite website)
         {
             var isAccessed = await _websiteCheckerClient.CheckAsync(website.Address);

@@ -5,7 +5,6 @@ namespace SiteAvailabilityMonitoring.Abstractions.Dto
 {
     public sealed class WebsiteAdd
     {
-        [JsonProperty("addresses")]
-        public List<string> Addresses { get; set; }
+        [JsonProperty("addresses")] public List<string> Addresses { get; set; }
     }
 }

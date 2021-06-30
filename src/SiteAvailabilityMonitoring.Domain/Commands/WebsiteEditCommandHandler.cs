@@ -6,13 +6,14 @@ using SiteAvailabilityMonitoring.Entities;
 
 namespace SiteAvailabilityMonitoring.Domain.Commands
 {
-    public class WebsiteEditCommandHandler 
+    public class WebsiteEditCommandHandler
         : IRequestHandler<WebsiteEditCommand>
     {
         private readonly IWebsiteRepository _websiteRepository;
         private readonly WebsiteCheckerClient _websiteCheckerClient;
 
-        public WebsiteEditCommandHandler(IWebsiteRepository websiteRepository, WebsiteCheckerClient websiteCheckerClient)
+        public WebsiteEditCommandHandler(IWebsiteRepository websiteRepository,
+            WebsiteCheckerClient websiteCheckerClient)
         {
             _websiteRepository = websiteRepository;
             _websiteCheckerClient = websiteCheckerClient;
@@ -24,7 +25,7 @@ namespace SiteAvailabilityMonitoring.Domain.Commands
             var website = new DbWebsite {Id = request.Id, Address = request.Address, Status = status};
 
             await _websiteRepository.UpdateAsync(website);
-            
+
             return Unit.Value;
         }
     }

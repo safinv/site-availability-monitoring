@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+    </PropertyGroup>
+
+   <ItemGroup>
+        <ProjectReference Include="..\SiteAvailabilityMonitoring.DataAccess\SiteAvailabilityMonitoring.DataAccess.csproj" />
+        <ProjectReference Include="..\SiteAvailabilityMonitoring.Domain\SiteAvailabilityMonitoring.Domain.csproj" />
+        <ProjectReference Include="..\SiteAvailabilityMonitoring.Entities\SiteAvailabilityMonitoring.Entities.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.Net.Http.Json" Version="5.0.0-rc.2.20475.5" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0-rc4" />
+    </ItemGroup>
+
+</Project>

@@ -4,10 +4,10 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using SiteAvailabilityMonitoring.Api.Options;
 using SiteAvailabilityMonitoring.Domain.Commands;
-using SiteAvailabilityMonitoring.Options;
 
-namespace SiteAvailabilityMonitoring.BackgroundServices
+namespace SiteAvailabilityMonitoring.Api.BackgroundServices
 {
     public class CheckerBackgroundService : BackgroundService
     {
@@ -23,7 +23,7 @@ namespace SiteAvailabilityMonitoring.BackgroundServices
             return Task.Factory.StartNew(CheckWebsitesTaskAsync, (_scopeFactory, stoppingToken), stoppingToken,
                 TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
-        
+
         private static async Task CheckWebsitesTaskAsync(object obj)
         {
             var (scopeFactory, stoppingToken) = ((IServiceScopeFactory, CancellationToken)) obj;
@@ -36,7 +36,7 @@ namespace SiteAvailabilityMonitoring.BackgroundServices
             {
                 var command = new CheckAvailabilityCommand();
                 await mediatr.Send(command);
-                
+
                 await Task.Delay(options.DelayTimeSpan, stoppingToken);
             }
         }

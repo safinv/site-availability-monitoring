@@ -2,7 +2,7 @@
 
 set NAME=postgres
 
-call docker-container-stop "%NAME%"
+call docker stop "%NAME%"
 
 call docker run --rm --detach ^
     --name "%NAME%" ^

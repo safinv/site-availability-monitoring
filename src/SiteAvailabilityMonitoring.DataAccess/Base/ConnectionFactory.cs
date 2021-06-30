@@ -11,7 +11,7 @@ namespace SiteAvailabilityMonitoring.DataAccess.Base
         {
             _connectionString = connectionString;
         }
-        
+
         public DbConnection CreateConnection()
         {
             return new NpgsqlConnection(_connectionString);

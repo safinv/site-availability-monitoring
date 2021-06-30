@@ -1,11 +1,9 @@
 ﻿using System;
-
 using FluentMigrator.Runner;
-
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace SiteAvailabilityMonitoring.Extensions
+namespace SiteAvailabilityMonitoring.Api.Extensions
 {
     public static class RunnerMigrateExtensions
     {
@@ -19,7 +17,7 @@ namespace SiteAvailabilityMonitoring.Extensions
         {
             using var scope = serviceProvider.CreateScope();
             var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
-            
+
             if (runner.HasMigrationsToApplyUp())
             {
                 runner.MigrateUp();

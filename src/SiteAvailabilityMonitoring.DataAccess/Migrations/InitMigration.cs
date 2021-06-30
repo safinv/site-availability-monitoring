@@ -1,5 +1,4 @@
 ﻿using FluentMigrator;
-
 using SiteAvailabilityMonitoring.DataAccess.Extensions;
 using SiteAvailabilityMonitoring.Entities;
 
@@ -12,7 +11,7 @@ namespace SiteAvailabilityMonitoring.DataAccess.Migrations
         {
             Execute.CreateEnum<DbStatus>("e_status");
 
-            Create.Table("websites")
+            Create.Table("website")
                 .WithColumn("id").AsInt64().Identity().PrimaryKey()
                 .WithColumn("address").AsString().NotNullable()
                 .WithColumn("status").AsCustom("e_status").Nullable();

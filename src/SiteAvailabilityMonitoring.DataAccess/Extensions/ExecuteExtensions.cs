@@ -5,7 +5,8 @@ namespace SiteAvailabilityMonitoring.DataAccess.Extensions
 {
     public static class ExecuteExtensions
     {
-        public static void CreateEnum<T>(this FluentMigrator.Builders.Execute.IExecuteExpressionRoot execute, string enumName = null) where T : Enum
+        public static void CreateEnum<T>(this FluentMigrator.Builders.Execute.IExecuteExpressionRoot execute,
+            string enumName = null) where T : Enum
         {
             var type = typeof(T);
             var enumFormatValues = Enum.GetValues(type).Cast<T>().Select(elem => $"'{elem.ToString()}'");

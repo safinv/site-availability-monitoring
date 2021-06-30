@@ -2,7 +2,7 @@
 
 namespace SiteAvailabilityMonitoring.Domain.Commands
 {
-    public class CheckAvailabilityCommand 
+    public class CheckAvailabilityCommand
         : IRequest<Unit>
     {
     }

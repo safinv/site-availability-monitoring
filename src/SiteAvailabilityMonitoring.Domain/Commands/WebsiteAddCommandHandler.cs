@@ -9,7 +9,7 @@ using SiteAvailabilityMonitoring.Entities;
 
 namespace SiteAvailabilityMonitoring.Domain.Commands
 {
-    public class WebsiteAddCommandHandler 
+    public class WebsiteAddCommandHandler
         : IRequestHandler<WebsiteAddCommand, IEnumerable<Website>>
     {
         private readonly IWebsiteRepository _websiteRepository;
@@ -25,7 +25,7 @@ namespace SiteAvailabilityMonitoring.Domain.Commands
         {
             var tasks = command.Addresses.Select(HandleUrlAddress);
             var websites = await Task.WhenAll(tasks);
-            
+
             var result = websites.Select(x => new Website
             {
                 Id = x.Id,

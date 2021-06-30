@@ -4,7 +4,7 @@ using SiteAvailabilityMonitoring.Abstractions.Dto;
 
 namespace SiteAvailabilityMonitoring.Domain.Commands
 {
-    public class WebsiteAddCommand 
+    public class WebsiteAddCommand
         : IRequest<IEnumerable<Website>>
     {
         public WebsiteAddCommand(IReadOnlyCollection<string> addresses)

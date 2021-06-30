@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SiteAvailabilityMonitoring.Options
+namespace SiteAvailabilityMonitoring.Api.Options
 {
     public class CheckerOptions
     {

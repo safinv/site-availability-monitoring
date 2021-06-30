@@ -6,18 +6,17 @@ using SiteAvailabilityMonitoring.Abstractions.Dto;
 using SiteAvailabilityMonitoring.Domain.Commands;
 using SiteAvailabilityMonitoring.Domain.Queries;
 
-namespace SiteAvailabilityMonitoring.Controllers
+namespace SiteAvailabilityMonitoring.Api.Controllers
 {
     [ApiController]
-    [Route("website")]
+    [Route("api/website")]
     public class WebsiteManagerController : Controller
     {
         private readonly IMediator _mediator;
-        
+
         public WebsiteManagerController(IMediator mediator)
         {
             _mediator = mediator;
-            
         }
 
         /// <summary>
@@ -29,7 +28,7 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             var command = new WebsiteGetQuery();
             var result = await _mediator.Send(command);
-            
+
             return result;
         }
 
@@ -43,11 +42,11 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             var command = new WebsiteAddCommand(model.Addresses);
             var result = await _mediator.Send(command);
-            
+
             return result;
         }
-        
-        
+
+
         /// <summary>
         ///     Change url.
         /// </summary>
@@ -57,10 +56,10 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             var command = new WebsiteEditCommand(model.Id, model.Address);
             await _mediator.Send(command);
-            
+
             return Ok();
         }
-        
+
         /// <summary>
         ///     Availability urls check.
         /// </summary>
@@ -69,7 +68,7 @@ namespace SiteAvailabilityMonitoring.Controllers
         {
             var command = new CheckAvailabilityCommand();
             await _mediator.Send(command);
-            
+
             return Ok();
         }
     }

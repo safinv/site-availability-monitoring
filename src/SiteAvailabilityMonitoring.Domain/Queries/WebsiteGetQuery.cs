@@ -4,7 +4,7 @@ using SiteAvailabilityMonitoring.Abstractions.Dto;
 
 namespace SiteAvailabilityMonitoring.Domain.Queries
 {
-    public class WebsiteGetQuery 
+    public class WebsiteGetQuery
         : IRequest<IEnumerable<Website>>
     {
     }

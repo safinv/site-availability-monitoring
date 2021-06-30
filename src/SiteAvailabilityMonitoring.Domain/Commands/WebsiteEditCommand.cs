@@ -10,7 +10,7 @@ namespace SiteAvailabilityMonitoring.Domain.Commands
             Address = address;
         }
 
-        public long Id { get; } 
+        public long Id { get; }
         public string Address { get; }
     }
 }

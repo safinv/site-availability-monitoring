@@ -8,12 +8,13 @@ namespace SiteAvailabilityMonitoring.DataAccess
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection ConfigureDatabase(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ConfigureDatabase(this IServiceCollection services,
+            IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("NpgsqlDatabase");
             services.AddSingleton<IConnectionFactory>(
                 new ConnectionFactory(connectionString));
-            
+
             services.AddFluentMigratorCore()
                 .ConfigureRunner(builder =>
                 {
