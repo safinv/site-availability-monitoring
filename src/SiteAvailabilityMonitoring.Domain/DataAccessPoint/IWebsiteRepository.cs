@@ -11,5 +11,6 @@ namespace SiteAvailabilityMonitoring.Domain.DataAccessPoint
         Task<DbWebsite> CreateAsync(DbWebsite dbWebsite);
 
         Task UpdateAsync(DbWebsite dbWebsite);
+        Task DeleteAsync(long id);
     }
 }

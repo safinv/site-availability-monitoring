@@ -43,5 +43,13 @@ namespace SiteAvailabilityMonitoring.DataAccess.Implementations
 
             await connection.ExecuteAsync(query, dbWebsite);
         }
+        
+        public async Task DeleteAsync(long id)
+        {
+            await using var connection = _connectionFactory.CreateConnection();
+            var query = @$"DELETE FROM website WHERE id = @id";
+
+            await connection.ExecuteAsync(query, new {id});
+        }
     }
 }

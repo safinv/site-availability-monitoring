@@ -1,35 +1,73 @@
 ﻿@page "/"
 @using SiteAvailabilityMonitoring.Abstractions.Dto
-@using System.Net.Http
+@using Microsoft.Extensions.Logging
+
+@inject ILogger<WebsiteBase> Logger
 @inject HttpClient Http
 
 <div class="container">
-    <table class="table table-striped table-bordered">
-        <thead>
-        <tr>
-            <th>Url</th>
-            <th>Status</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var website in _websites)
-        {
-            <tr>
-                <td>@website.Address</td>
-                <td>@website.Status</td>
-            </tr>
-        }
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-sm-3">
+            <form class="form-inline">
+                <EditForm Model="@addWebsite" OnValidSubmit="@Create">
+                    <div class="form-group mb-2">
+                        <InputText class="form-control" id="address" @bind-Value="addWebsite.Address"/>
+                    </div>
+                    <button class="btn btn-primary btn-sm" type="submit">Add</button>
+                </EditForm>
+            </form>
+        </div>
+        <div class="col-sm-9">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Address</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var website in _websites)
+                {
+                    <tr>
+                        <td>@website.Address</td>
+                        <td>@website.Status</td>
+                        <td class="col-sm-2">
+                            <a class="btn btn-primary btn-sm" href="developer/edit/@website.Id">Edit</a>
+                            <button class="btn btn-secondary btn-sm" @onclick="@(() => Delete(website.Id))">Delete</button>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 @code {
-
-    private IEnumerable<Website> _websites = new List<Website>();
+    IEnumerable<Website> _websites = new List<Website>();
+    Website addWebsite = new();
 
     protected override async Task OnInitializedAsync()
     {
         _websites = await Http.GetFromJsonAsync<IEnumerable<Website>>("api/website");
+    }
+
+    async Task Delete(long id)
+    {
+        await Http.DeleteAsync($"api/website/{id}");
+        await OnInitializedAsync();
+    }
+
+    async Task Create()
+    {
+        var model = new WebsiteAdd
+        {
+            Addresses = new List<string> {addWebsite.Address}
+        };
+
+        await Http.PostAsJsonAsync("api/website", model);
+        await OnInitializedAsync();
     }
 
 }

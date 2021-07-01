@@ -37,22 +37,21 @@ namespace SiteAvailabilityMonitoring.Api.Controllers
         /// </summary>
         /// <param name="model"><see cref="WebsiteAdd"/></param>
         /// <returns>Id's</returns>
-        [HttpPost("add")]
-        public async Task<IEnumerable<Website>> AddWebsite([FromBody] WebsiteAdd model)
+        [HttpPost]
+        public async Task<IEnumerable<Website>> Add([FromBody] WebsiteAdd model)
         {
             var command = new WebsiteAddCommand(model.Addresses);
             var result = await _mediator.Send(command);
 
             return result;
         }
-
-
+        
         /// <summary>
         ///     Change url.
         /// </summary>
         /// <param name="model"><see cref="WebsiteEdit"/></param>
-        [HttpPut("edit")]
-        public async Task<IActionResult> EditWebsite([FromBody] WebsiteEdit model)
+        [HttpPut]
+        public async Task<IActionResult> Edit([FromBody] WebsiteEdit model)
         {
             var command = new WebsiteEditCommand(model.Id, model.Address);
             await _mediator.Send(command);
@@ -60,6 +59,19 @@ namespace SiteAvailabilityMonitoring.Api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        ///     Delete row.
+        /// </summary>
+        /// <param name="id">Identity website.</param>
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(long id)
+        {
+            var command = new WebsiteDeleteCommand(id);
+            await _mediator.Send(command);
+
+            return Ok();
+        }
+        
         /// <summary>
         ///     Availability urls check.
         /// </summary>
