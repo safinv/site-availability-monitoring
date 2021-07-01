@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Mapster;
 using MediatR;
 using SiteAvailabilityMonitoring.Abstractions.Dto;
 using SiteAvailabilityMonitoring.Domain.DataAccessPoint;
@@ -21,12 +22,7 @@ namespace SiteAvailabilityMonitoring.Domain.Queries
         public async Task<IEnumerable<Website>> Handle(WebsiteGetQuery request, CancellationToken cancellationToken)
         {
             var sites = await _websiteRepository.GetAllAsync();
-            return sites.Select(x => new Website
-            {
-                Id = x.Id,
-                Address = x.Address,
-                Status = x.StatusAsString
-            });
+            return sites.OrderBy(x => x.Id).Adapt<IEnumerable<Website>>();
         }
     }
 }

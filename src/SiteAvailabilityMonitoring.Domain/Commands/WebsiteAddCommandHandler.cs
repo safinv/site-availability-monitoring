@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Mapster;
 using MediatR;
 using SiteAvailabilityMonitoring.Abstractions.Dto;
 using SiteAvailabilityMonitoring.Domain.DataAccessPoint;
@@ -26,14 +27,7 @@ namespace SiteAvailabilityMonitoring.Domain.Commands
             var tasks = command.Addresses.Select(HandleUrlAddress);
             var websites = await Task.WhenAll(tasks);
 
-            var result = websites.Select(x => new Website
-            {
-                Id = x.Id,
-                Address = x.Address,
-                Status = x.StatusAsString
-            });
-
-            return result;
+            return websites.Adapt<IEnumerable<Website>>();
         }
 
         private async Task<DbWebsite> HandleUrlAddress(string address)

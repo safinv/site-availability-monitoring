@@ -3,7 +3,7 @@ using Npgsql;
 
 namespace SiteAvailabilityMonitoring.DataAccess.Base
 {
-    public class ConnectionFactory : IConnectionFactory
+    internal class ConnectionFactory : IConnectionFactory
     {
         private readonly string _connectionString;
 

@@ -22,7 +22,12 @@ namespace SiteAvailabilityMonitoring.Domain.Commands
         public async Task<Unit> Handle(WebsiteEditCommand request, CancellationToken cancellationToken)
         {
             var status = await _websiteCheckerClient.CheckAsync(request.Address);
-            var website = new DbWebsite {Id = request.Id, Address = request.Address, Status = status};
+            var website = new DbWebsite
+            {
+                Id = request.Id,
+                Address = request.Address,
+                Status = status
+            };
 
             await _websiteRepository.UpdateAsync(website);
 
