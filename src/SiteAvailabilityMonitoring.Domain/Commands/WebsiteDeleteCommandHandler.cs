@@ -18,7 +18,7 @@ namespace SiteAvailabilityMonitoring.Domain.Commands
         public async Task<Unit> Handle(WebsiteDeleteCommand request, CancellationToken cancellationToken)
         {
             await _websiteRepository.DeleteAsync(request.Id);
-            
+
             return Unit.Value;
         }
     }

@@ -43,7 +43,7 @@ namespace SiteAvailabilityMonitoring.DataAccess.Implementations
 
             await connection.ExecuteAsync(query, dbWebsite);
         }
-        
+
         public async Task DeleteAsync(long id)
         {
             await using var connection = _connectionFactory.CreateConnection();

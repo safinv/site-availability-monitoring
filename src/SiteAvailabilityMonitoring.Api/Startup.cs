@@ -52,7 +52,7 @@ namespace SiteAvailabilityMonitoring.Api
 
             app.UseRouting();
 
-            app.UseCors(policy => policy.WithOrigins("https://localhost:5001", "http://localhost:5000")
+            app.UseCors(policy => policy.WithOrigins("http://localhost:4200")
                 .AllowAnyMethod()
                 .WithHeaders(HeaderNames.ContentType));
 

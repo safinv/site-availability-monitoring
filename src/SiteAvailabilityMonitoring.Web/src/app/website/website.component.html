@@ -1,0 +1,20 @@
+<div class="container">
+  
+  <form [formGroup]="addWebsiteForm" (ngSubmit)="addWebsites()">
+    <div class="form-group">
+      <label for="address">Add website</label>
+      <input type="string" formControlName="address" class="form-control" />
+    </div>
+    <div class="form-group">
+      <button class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+
+  <p style="margin-top: 2em"></p>
+
+  <div *ngFor="let website of websites">
+    {{website.id}} {{website.address}} {{website.status}} <button (click)="deleteWebsite(website.id)"> Delete </button>
+  </div>
+
+  <button (click)="checkWebsites()">Check sites</button>
+</div>

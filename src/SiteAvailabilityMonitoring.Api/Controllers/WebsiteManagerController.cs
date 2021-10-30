@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -45,7 +46,7 @@ namespace SiteAvailabilityMonitoring.Api.Controllers
 
             return result;
         }
-        
+
         /// <summary>
         ///     Change url.
         /// </summary>
@@ -71,7 +72,7 @@ namespace SiteAvailabilityMonitoring.Api.Controllers
 
             return Ok();
         }
-        
+
         /// <summary>
         ///     Availability urls check.
         /// </summary>
