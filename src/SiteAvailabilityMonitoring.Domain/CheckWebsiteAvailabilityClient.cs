@@ -1,29 +1,29 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using SiteAvailabilityMonitoring.Entities;
+using SiteAvailabilityMonitoring.Domain.Models;
 
 namespace SiteAvailabilityMonitoring.Domain
 {
-    public class WebsiteCheckerClient
+    public class CheckWebsiteAvailabilityClient
     {
         private readonly HttpClient _httpClient;
 
-        public WebsiteCheckerClient(HttpClient httpClient)
+        public CheckWebsiteAvailabilityClient(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }
 
-        public async Task<DbStatus> CheckAsync(string address)
+        public async Task<WebsiteAvailability> CheckAsync(string address)
         {
             try
             {
                 var result = await _httpClient.GetAsync(address);
-                return result.IsSuccessStatusCode ? DbStatus.Enable : DbStatus.Disable;
+                return WebsiteAvailability.Ok(result);
             }
             catch (Exception)
             {
-                return DbStatus.Disable;
+                return WebsiteAvailability.Error();
             }
         }
     }

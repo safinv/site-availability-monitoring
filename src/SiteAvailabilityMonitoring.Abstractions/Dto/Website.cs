@@ -1,13 +1,19 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace SiteAvailabilityMonitoring.Abstractions.Dto
 {
     public class Website
     {
-        [JsonProperty("id")] public long Id { get; set; }
+        [JsonPropertyName("id")] 
+        public long Id { get; set; }
 
-        [JsonProperty("address")] public string Address { get; set; }
+        [JsonPropertyName("address")] 
+        public string Address { get; set; }
 
-        [JsonProperty("status")] public string Status { get; set; }
+        [JsonPropertyName("available")] 
+        public bool Available { get; set; }
+        
+        [JsonPropertyName("status_code")] 
+        public int StatusCode { get; set; }
     }
 }

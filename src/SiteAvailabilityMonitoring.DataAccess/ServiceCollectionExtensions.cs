@@ -1,4 +1,5 @@
-﻿using FluentMigrator.Runner;
+﻿using Dapper;
+using FluentMigrator.Runner;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SiteAvailabilityMonitoring.DataAccess.Base;
@@ -11,6 +12,8 @@ namespace SiteAvailabilityMonitoring.DataAccess
         public static IServiceCollection ConfigureDatabase(this IServiceCollection services,
             IConfiguration configuration)
         {
+            DefaultTypeMap.MatchNamesWithUnderscores = true;
+            
             var connectionString = configuration.GetConnectionString("NpgsqlDatabase");
             services.AddSingleton<IConnectionFactory>(
                 new ConnectionFactory(connectionString));

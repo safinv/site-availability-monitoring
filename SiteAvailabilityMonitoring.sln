@@ -17,10 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteAvailabilityMonitoring.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteAvailabilityMonitoring.Domain", "src\SiteAvailabilityMonitoring.Domain\SiteAvailabilityMonitoring.Domain.csproj", "{EA8ED934-6221-470A-8C3B-35A643058CD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteAvailabilityMonitoring.Entities", "src\SiteAvailabilityMonitoring.Entities\SiteAvailabilityMonitoring.Entities.csproj", "{A560254F-F057-460A-8DD9-DDA749E4E7AD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteAvailabilityMonitoring", "src\SiteAvailabilityMonitoring\SiteAvailabilityMonitoring.csproj", "{97CC7412-98C1-402D-A581-8796F7D8DD3A}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{E0681BD8-E860-4489-81DA-20E29D744B0B}"
 ProjectSection(SolutionItems) = preProject
 	scripts\up-postgres.sh = scripts\up-postgres.sh
@@ -48,10 +44,6 @@ Global
 		{EA8ED934-6221-470A-8C3B-35A643058CD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA8ED934-6221-470A-8C3B-35A643058CD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA8ED934-6221-470A-8C3B-35A643058CD7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A560254F-F057-460A-8DD9-DDA749E4E7AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A560254F-F057-460A-8DD9-DDA749E4E7AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A560254F-F057-460A-8DD9-DDA749E4E7AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A560254F-F057-460A-8DD9-DDA749E4E7AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

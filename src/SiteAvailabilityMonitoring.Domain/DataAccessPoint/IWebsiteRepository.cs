@@ -1,16 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
-using SiteAvailabilityMonitoring.Entities;
+using SiteAvailabilityMonitoring.Domain.Entities;
 
 namespace SiteAvailabilityMonitoring.Domain.DataAccessPoint
 {
     public interface IWebsiteRepository
     {
-        Task<IEnumerable<DbWebsite>> GetAllAsync();
+        Task<DbWebsite> GetByIdAsync(long id ,CancellationToken cancellationToken);
+        
+        Task<IEnumerable<DbWebsite>> GetAsync(CancellationToken cancellationToken);
+        
+        Task<DbWebsite> CreateAsync(DbWebsite dbWebsite, CancellationToken cancellationToken);
 
-        Task<DbWebsite> CreateAsync(DbWebsite dbWebsite);
+        Task UpdateAsync(DbWebsite dbWebsite, CancellationToken cancellationToken);
 
-        Task UpdateAsync(DbWebsite dbWebsite);
-        Task DeleteAsync(long id);
+        Task DeleteAsync(long id, CancellationToken cancellationToken);
     }
 }

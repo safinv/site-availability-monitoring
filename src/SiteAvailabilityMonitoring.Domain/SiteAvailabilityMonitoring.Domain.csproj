@@ -6,7 +6,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SiteAvailabilityMonitoring.Abstractions\SiteAvailabilityMonitoring.Abstractions.csproj" />
-      <ProjectReference Include="..\SiteAvailabilityMonitoring.Entities\SiteAvailabilityMonitoring.Entities.csproj" />
     </ItemGroup>
 
     <ItemGroup>

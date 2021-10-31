@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +26,20 @@ namespace SiteAvailabilityMonitoring.Api.Controllers
         [HttpGet]
         public async Task<IEnumerable<Website>> Get()
         {
-            var command = new WebsiteGetQuery();
+            var command = new GetWebsitesQuery();
+            var result = await _mediator.Send(command);
+
+            return result;
+        }
+        
+        /// <summary>
+        ///     Get website.
+        /// </summary>
+        /// <returns><see cref="Website"/></returns>
+        [HttpGet("{id:long}")]
+        public async Task<Website> Get(long id)
+        {
+            var command = new GetWebsiteQuery(id);
             var result = await _mediator.Send(command);
 
             return result;
@@ -41,7 +53,7 @@ namespace SiteAvailabilityMonitoring.Api.Controllers
         [HttpPost]
         public async Task<IEnumerable<Website>> Add([FromBody] WebsiteAdd model)
         {
-            var command = new WebsiteAddCommand(model.Addresses);
+            var command = new AddWebsiteCommand(model.Addresses);
             var result = await _mediator.Send(command);
 
             return result;
@@ -52,12 +64,12 @@ namespace SiteAvailabilityMonitoring.Api.Controllers
         /// </summary>
         /// <param name="model"><see cref="WebsiteEdit"/></param>
         [HttpPut]
-        public async Task<IActionResult> Edit([FromBody] WebsiteEdit model)
+        public async Task<Website> Edit([FromBody] WebsiteEdit model)
         {
-            var command = new WebsiteEditCommand(model.Id, model.Address);
-            await _mediator.Send(command);
+            var command = new EditWebsiteCommand(model.Id, model.Address);
+            var result = await _mediator.Send(command);
 
-            return Ok();
+            return result;
         }
 
         /// <summary>
@@ -67,7 +79,7 @@ namespace SiteAvailabilityMonitoring.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
-            var command = new WebsiteDeleteCommand(id);
+            var command = new DeleteWebsiteCommand(id);
             await _mediator.Send(command);
 
             return Ok();

@@ -8,7 +8,7 @@ namespace SiteAvailabilityMonitoring.Domain
     {
         public static IServiceCollection ConfigureMediatr(this IServiceCollection services)
         {
-            services.AddMediatR(typeof(WebsiteGetQuery));
+            services.AddMediatR(typeof(GetWebsitesQuery));
             return services;
         }
     }

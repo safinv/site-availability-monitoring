@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using SiteAvailabilityMonitoring.Domain.DataAccessPoint;
-using SiteAvailabilityMonitoring.Entities;
+using SiteAvailabilityMonitoring.Domain.Entities;
 
 namespace SiteAvailabilityMonitoring.Domain.Commands
 {
@@ -11,33 +11,36 @@ namespace SiteAvailabilityMonitoring.Domain.Commands
         : IRequestHandler<CheckAvailabilityCommand>
     {
         private readonly IWebsiteRepository _websiteRepository;
-        private readonly WebsiteCheckerClient _websiteCheckerClient;
+        private readonly CheckWebsiteAvailabilityClient _checkWebsiteAvailabilityClient;
 
         public CheckAvailabilityCommandHandler(
             IWebsiteRepository websiteRepository,
-            WebsiteCheckerClient websiteCheckerClient)
+            CheckWebsiteAvailabilityClient checkWebsiteAvailabilityClient)
         {
             _websiteRepository = websiteRepository;
-            _websiteCheckerClient = websiteCheckerClient;
+            _checkWebsiteAvailabilityClient = checkWebsiteAvailabilityClient;
         }
 
         public async Task<Unit> Handle(CheckAvailabilityCommand request, CancellationToken cancellationToken)
         {
-            var websites = await _websiteRepository.GetAllAsync();
-            var tasks = websites.Select(UpdateStatus).ToList();
+            var websites = await _websiteRepository.GetAsync(cancellationToken);
+            var tasks = websites
+                .Select(ws => UpdateStatus(ws, cancellationToken))
+                .ToList();
 
             await Task.WhenAll(tasks);
-
             return Unit.Value;
         }
 
-        private async Task UpdateStatus(DbWebsite website)
+        private async Task UpdateStatus(DbWebsite website, CancellationToken cancellationToken)
         {
-            var isAccessed = await _websiteCheckerClient.CheckAsync(website.Address);
-            if (isAccessed != website.Status)
+            var availability = await _checkWebsiteAvailabilityClient.CheckAsync(website.Address);
+            if (availability.StatusCode != website.StatusCode)
             {
-                website.Status = isAccessed;
-                await _websiteRepository.UpdateAsync(website);
+                website.StatusCode = availability.StatusCode;
+                website.Available = availability.Available;
+                
+                await _websiteRepository.UpdateAsync(website, cancellationToken);
             }
         }
     }

@@ -1,6 +1,4 @@
 ﻿using FluentMigrator;
-using SiteAvailabilityMonitoring.DataAccess.Extensions;
-using SiteAvailabilityMonitoring.Entities;
 
 namespace SiteAvailabilityMonitoring.DataAccess.Migrations
 {
@@ -9,17 +7,16 @@ namespace SiteAvailabilityMonitoring.DataAccess.Migrations
     {
         public override void Up()
         {
-            Execute.CreateEnum<DbStatus>("e_status");
-
             Create.Table("website")
                 .WithColumn("id").AsInt64().Identity().PrimaryKey()
                 .WithColumn("address").AsString().NotNullable()
-                .WithColumn("status").AsCustom("e_status").Nullable();
+                .WithColumn("available").AsBoolean().NotNullable()
+                .WithColumn("status_code").AsInt32().NotNullable();
         }
 
         public override void Down()
         {
-            Delete.Table("sites");
+            Delete.Table("website");
         }
     }
 }

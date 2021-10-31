@@ -31,7 +31,7 @@ namespace SiteAvailabilityMonitoring.Api
 
             services
                 .AddSingleton<IWebsiteRepository, WebsiteRepository>()
-                .AddHttpClient<WebsiteCheckerClient>();
+                .AddHttpClient<CheckWebsiteAvailabilityClient>();
 
             services.Configure<CheckerOptions>(_configuration.GetSection("CheckerOptions"));
 

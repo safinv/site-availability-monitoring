@@ -5,20 +5,19 @@ using SiteAvailabilityMonitoring.Domain.DataAccessPoint;
 
 namespace SiteAvailabilityMonitoring.Domain.Commands
 {
-    public class WebsiteDeleteCommandHandler
-        : IRequestHandler<WebsiteDeleteCommand>
+    public class DeleteWebsiteCommandHandler
+        : IRequestHandler<DeleteWebsiteCommand>
     {
         private readonly IWebsiteRepository _websiteRepository;
 
-        public WebsiteDeleteCommandHandler(IWebsiteRepository websiteRepository)
+        public DeleteWebsiteCommandHandler(IWebsiteRepository websiteRepository)
         {
             _websiteRepository = websiteRepository;
         }
 
-        public async Task<Unit> Handle(WebsiteDeleteCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteWebsiteCommand request, CancellationToken cancellationToken)
         {
-            await _websiteRepository.DeleteAsync(request.Id);
-
+            await _websiteRepository.DeleteAsync(request.Id, cancellationToken);
             return Unit.Value;
         }
     }

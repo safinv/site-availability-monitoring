@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace SiteAvailabilityMonitoring.Abstractions.Dto
 {
     public sealed class WebsiteAdd
     {
-        [JsonProperty("addresses")] public List<string> Addresses { get; set; }
+        [JsonPropertyName("addresses")]
+        public IReadOnlyCollection<string> Addresses { get; set; }
     }
 }

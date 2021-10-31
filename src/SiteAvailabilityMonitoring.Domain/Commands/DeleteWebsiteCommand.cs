@@ -2,10 +2,10 @@
 
 namespace SiteAvailabilityMonitoring.Domain.Commands
 {
-    public class WebsiteDeleteCommand
+    public class DeleteWebsiteCommand
         : IRequest
     {
-        public WebsiteDeleteCommand(long id)
+        public DeleteWebsiteCommand(long id)
         {
             Id = id;
         }

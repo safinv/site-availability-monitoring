@@ -1,10 +1,12 @@
 ﻿using MediatR;
+using SiteAvailabilityMonitoring.Abstractions.Dto;
 
 namespace SiteAvailabilityMonitoring.Domain.Commands
 {
-    public class WebsiteEditCommand : IRequest<Unit>
+    public class EditWebsiteCommand 
+        : IRequest<Website>
     {
-        public WebsiteEditCommand(long id, string address)
+        public EditWebsiteCommand(long id, string address)
         {
             Id = id;
             Address = address;

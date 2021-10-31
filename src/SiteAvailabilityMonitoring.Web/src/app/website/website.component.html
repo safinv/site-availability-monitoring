@@ -1,20 +1,49 @@
 <div class="container">
-  
+
   <form [formGroup]="addWebsiteForm" (ngSubmit)="addWebsites()">
-    <div class="form-group">
-      <label for="address">Add website</label>
-      <input type="string" formControlName="address" class="form-control" />
-    </div>
-    <div class="form-group">
+    <div class="form-insert">
+      <input type="string" formControlName="address" class="form-control" placeholder="insert website" />
       <button class="btn btn-primary">Submit</button>
     </div>
   </form>
 
-  <p style="margin-top: 2em"></p>
-
-  <div *ngFor="let website of websites">
-    {{website.id}} {{website.address}} {{website.status}} <button (click)="deleteWebsite(website.id)"> Delete </button>
+  <div class="status-btn-container">
+    <button (click)="checkWebsites()">Status</button>
   </div>
 
-  <button (click)="checkWebsites()">Check sites</button>
+  <div class="websites-block">
+    <table class="form-table" mat-table [dataSource]="dataSource">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> Id </th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="address">
+        <th mat-header-cell *matHeaderCellDef> Address </th>
+        <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="available">
+        <th mat-header-cell *matHeaderCellDef> Available </th>
+        <td mat-cell *matCellDef="let element"> {{element.available}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="status_code">
+        <th mat-header-cell *matHeaderCellDef> Status code </th>
+        <td mat-cell *matCellDef="let element"> {{element.status_code}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon class="test" aria-hidden="false" aria-label="Example home icon" (click)="deleteWebsite(element.id)">close
+          </mat-icon>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
 </div>
