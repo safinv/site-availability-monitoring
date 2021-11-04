@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ConfigService } from '../config/config.service';
+import { ApiService } from '../config/api.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from "@angular/material/table";
 
@@ -17,7 +17,7 @@ export interface Website {
 })
 export class WebsiteComponent implements OnInit {
 
-  configService: ConfigService;
+  apiService: ApiService;
 
   addWebsiteForm!: FormGroup;
 
@@ -26,8 +26,8 @@ export class WebsiteComponent implements OnInit {
 
   websites!: Website[];
 
-  constructor(private formBuilder: FormBuilder, configService: ConfigService) {
-    this.configService = configService;
+  constructor(private formBuilder: FormBuilder, apiService: ApiService) {
+    this.apiService = apiService;
     this.dataSource = new MatTableDataSource<Website>();
   }
 
@@ -39,7 +39,7 @@ export class WebsiteComponent implements OnInit {
   }
 
   showWebsites() {
-    this.configService.getWebsites()
+    this.apiService.getWebsites()
       .subscribe((data: Array<Website>) => {
         this.websites = data;
         this.setWebsitesIntoTable();
@@ -48,7 +48,7 @@ export class WebsiteComponent implements OnInit {
 
   addWebsites() {
     const add = { addresses: [this.controls().address.value] };
-    this.configService
+    this.apiService
       .addWebsites(add)
       .subscribe(websites => {
         this.websites.push(websites[0]);
@@ -58,7 +58,7 @@ export class WebsiteComponent implements OnInit {
   }
 
   deleteWebsite(id: number) {
-    this.configService
+    this.apiService
       .deletewebsite(id)
       .subscribe(() => {
         this.removeWebsite(id);
@@ -67,7 +67,7 @@ export class WebsiteComponent implements OnInit {
   }
 
   checkWebsites() {
-    this.configService
+    this.apiService
       .checkWebsites()
       .subscribe();
   }

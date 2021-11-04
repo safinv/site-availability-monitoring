@@ -7,7 +7,7 @@ import { Website } from '../website/website.component';
 @Injectable({
   providedIn: 'root',
 })
-export class ConfigService {
+export class ApiService {
   constructor(private http: HttpClient) { }
 
   baseUrl: string = 'http://localhost:5000';

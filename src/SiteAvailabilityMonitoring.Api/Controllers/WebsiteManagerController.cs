@@ -20,7 +20,7 @@ namespace SiteAvailabilityMonitoring.Api.Controllers
         }
 
         /// <summary>
-        ///     Get all websites.
+        ///     Get websites.
         /// </summary>
         /// <returns><see cref="Website"/></returns>
         [HttpGet]

@@ -1,6 +1,44 @@
-.title {
-    padding-top: 16px !important;
-    padding-bottom: 16px !important;
-    text-align: center;
-    font-size: 30px;
+.header-container {
+    padding-bottom: 16px;
+}
+
+.hc-height {
+    height: 48px;
+}
+
+.hc-center {
+    max-width: 1084px;
+    margin: 0 auto;
+
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+
+.hc-logo-bg-color {
+    background-color: #46756e;
+}
+
+.hc-logo-title {
+    text-align: left;
+    font-size: 20px;
+    color: #fff;
+}
+
+.hc-menu-bg-color {
+    background-color: #fff;
+}
+
+.hc-menu-border {
+    border-bottom: 1px solid #dedede;
+}
+
+.hc-menu a {
+    padding-right: 10px;
+    text-decoration: none;
+    color: #909090;
+}
+
+.hc-menu a:active,
+.hc-menu a:focus {
+    color: #333;
 }
