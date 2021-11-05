@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
-using MediatR;
+﻿using MediatR;
 using SiteAvailabilityMonitoring.Abstractions.Dto;
 
 namespace SiteAvailabilityMonitoring.Domain.Commands
 {
     public class AddWebsiteCommand
-        : IRequest<IReadOnlyCollection<Website>>
+        : IRequest<Website>
     {
-        public AddWebsiteCommand(IReadOnlyCollection<string> addresses)
-        {
-            Addresses = addresses;
-        }
+        public string Address { get; }
 
-        public IReadOnlyCollection<string> Addresses { get; }
+        public AddWebsiteCommand(string address)
+        {
+            Address = address;
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace SiteAvailabilityMonitoring.DataAccess
             IConfiguration configuration)
         {
             DefaultTypeMap.MatchNamesWithUnderscores = true;
-            
+
             var connectionString = configuration.GetConnectionString("NpgsqlDatabase");
             services.AddSingleton<IConnectionFactory>(
                 new ConnectionFactory(connectionString));

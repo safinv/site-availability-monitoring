@@ -3,12 +3,13 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { WebsiteComponent } from './website/website.component';
 import { AboutComponent } from './about/about.component';
-import { AppComponent } from './app.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const routes: Routes = [
   // { path: '', component: AppComponent },
   { path: 'monitor', component: WebsiteComponent },
   { path: 'about', component: AboutComponent },
+  { path: '**', component: PageNotFoundComponent }
 ];
 
 @NgModule({

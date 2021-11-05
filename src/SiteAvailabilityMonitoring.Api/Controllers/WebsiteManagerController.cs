@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SiteAvailabilityMonitoring.Abstractions.Dto;
 using SiteAvailabilityMonitoring.Domain.Commands;
@@ -10,7 +11,8 @@ namespace SiteAvailabilityMonitoring.Api.Controllers
 {
     [ApiController]
     [Route("api/website")]
-    public class WebsiteManagerController : Controller
+    public class WebsiteManagerController
+        : Controller
     {
         private readonly IMediator _mediator;
 
@@ -24,39 +26,45 @@ namespace SiteAvailabilityMonitoring.Api.Controllers
         /// </summary>
         /// <returns><see cref="Website"/></returns>
         [HttpGet]
-        public async Task<IEnumerable<Website>> Get()
+        [ProducesResponseType(typeof(IReadOnlyCollection<Website>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Get(int limit = 10, int offset = 0)
         {
-            var command = new GetWebsitesQuery();
+            var command = new GetWebsitesQuery(limit, offset);
             var result = await _mediator.Send(command);
 
-            return result;
+            return Ok(result);
         }
-        
+
         /// <summary>
         ///     Get website.
         /// </summary>
         /// <returns><see cref="Website"/></returns>
         [HttpGet("{id:long}")]
-        public async Task<Website> Get(long id)
+        [ProducesResponseType(typeof(Website), StatusCodes.Status200OK)]
+        public async Task<IActionResult> Get(long id)
         {
             var command = new GetWebsiteQuery(id);
             var result = await _mediator.Send(command);
 
-            return result;
+            return Ok(result);
         }
 
         /// <summary>
         ///     Added website urls.
         /// </summary>
         /// <param name="model"><see cref="WebsiteAdd"/></param>
-        /// <returns>Id's</returns>
+        /// <returns><see cref="Website"/></returns>
         [HttpPost]
-        public async Task<IEnumerable<Website>> Add([FromBody] WebsiteAdd model)
+        [ProducesResponseType(typeof(Website), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Add([FromBody] WebsiteAdd model)
         {
-            var command = new AddWebsiteCommand(model.Addresses);
+            var command = new AddWebsiteCommand(model.Address);
             var result = await _mediator.Send(command);
 
-            return result;
+            if (result == null) return BadRequest($"Address '{model.Address}' already exsist.");
+
+            return Created("test", result);
         }
 
         /// <summary>
@@ -64,19 +72,23 @@ namespace SiteAvailabilityMonitoring.Api.Controllers
         /// </summary>
         /// <param name="model"><see cref="WebsiteEdit"/></param>
         [HttpPut]
-        public async Task<Website> Edit([FromBody] WebsiteEdit model)
+        [ProducesResponseType(typeof(Website), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Edit([FromBody] WebsiteEdit model)
         {
             var command = new EditWebsiteCommand(model.Id, model.Address);
             var result = await _mediator.Send(command);
 
-            return result;
+            return Ok(result);
         }
 
         /// <summary>
-        ///     Delete row.
+        ///     Delete url.
         /// </summary>
         /// <param name="id">Identity website.</param>
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:long}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Delete(long id)
         {
             var command = new DeleteWebsiteCommand(id);
@@ -86,9 +98,10 @@ namespace SiteAvailabilityMonitoring.Api.Controllers
         }
 
         /// <summary>
-        ///     Availability urls check.
+        ///     Availability all urls check.
         /// </summary>
         [HttpPost("check")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> Check()
         {
             var command = new CheckAvailabilityCommand();

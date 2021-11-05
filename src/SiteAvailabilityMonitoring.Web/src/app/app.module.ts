@@ -13,12 +13,13 @@ import { AppComponent } from './app.component';
 import { AboutComponent } from './about/about.component';
 import { WebsiteComponent } from './website/website.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
     AppComponent, 
     AboutComponent, 
-    WebsiteComponent
+    WebsiteComponent, PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

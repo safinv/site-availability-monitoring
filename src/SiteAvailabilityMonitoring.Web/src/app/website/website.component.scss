@@ -9,6 +9,12 @@
   overflow-y: hidden;
 }
 
+.wb-table-th {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
 th.mat-header-cell,
 td.mat-cell {
   text-align: left;
@@ -39,7 +45,6 @@ th.custom-left {
   padding: 0 16px;
   width: 70px;
   color: #f1f1f1;
-  background-color: #528c83;
   border: none;
   border-radius: 4px;
   margin-left: 8px;
@@ -51,8 +56,8 @@ th.custom-left {
   line-height: 34px;
 }
 
-.status-btn-container {
-  text-align: center;
+.form-insert button:disabled {
+  background-color: rgb(161, 161, 161);
 }
 
 .delete-icon:hover {
@@ -71,10 +76,28 @@ th.custom-left {
   display: inline-block;
 }
 
-.dot.enabled {
-  background-color: #528c83;
-}
-
 .dot.disabled {
   background-color: #cfcdcb;
+}
+
+.form-edit-control {
+  border: none;
+}
+
+.alert-form {
+  position: absolute;
+  text-align: center;
+  border-radius: 4px;
+  left: 3.5%;
+  top: 112px;
+  padding: 50px 50px 50px;
+  color: #f1f1f1;
+}
+
+.alert-form.success {
+  background-color: cadetblue;
+}
+
+.alert-form.error {
+  background-color: crimson;
 }

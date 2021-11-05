@@ -1,6 +1,6 @@
 ﻿namespace SiteAvailabilityMonitoring.Domain.Entities
 {
-    public class DbWebsite 
+    public class DbWebsite
         : Entity
     {
         public long Id { get; set; }

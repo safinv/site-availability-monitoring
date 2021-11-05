@@ -9,15 +9,16 @@ namespace SiteAvailabilityMonitoring.Domain.Models
 
         public static WebsiteAvailability Ok(HttpResponseMessage result)
         {
-            return new WebsiteAvailability
+            return new()
             {
                 Available = result.IsSuccessStatusCode,
                 StatusCode = (int) result.StatusCode
             };
         }
+
         public static WebsiteAvailability Error()
         {
-            return new WebsiteAvailability
+            return new()
             {
                 Available = false,
                 StatusCode = 0

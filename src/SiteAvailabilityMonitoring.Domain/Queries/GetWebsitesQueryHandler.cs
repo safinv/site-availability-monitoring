@@ -20,7 +20,7 @@ namespace SiteAvailabilityMonitoring.Domain.Queries
         }
 
         public async Task<IReadOnlyCollection<Website>> Handle(
-            GetWebsitesQuery request, 
+            GetWebsitesQuery request,
             CancellationToken cancellationToken)
         {
             var websites = await _websiteRepository.GetAsync(cancellationToken);

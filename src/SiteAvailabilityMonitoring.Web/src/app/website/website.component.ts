@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../config/api.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from "@angular/material/table";
 
 export interface Website {
@@ -8,6 +8,10 @@ export interface Website {
   address: string
   available: boolean
   status_code: number
+}
+
+export interface AddWebsite {
+  address: string;
 }
 
 @Component({
@@ -19,22 +23,32 @@ export class WebsiteComponent implements OnInit {
 
   apiService: ApiService;
 
-  addWebsiteForm!: FormGroup;
-
   displayedColumns: Array<string> = ['id', 'address', 'available', 'status_code', 'delete'];
   dataSource!: MatTableDataSource<Website>;
 
-  websites!: Website[];
+  addWebsiteForm!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, apiService: ApiService) {
+  websites: Website[];
+  addWebsite: AddWebsite;
+  errorMessage: string;
+
+  errorAlert: string;
+  successAlert: string;
+
+  constructor(private fb: FormBuilder, apiService: ApiService) {
     this.apiService = apiService;
     this.dataSource = new MatTableDataSource<Website>();
   }
 
   ngOnInit(): void {
-    this.addWebsiteForm = this.formBuilder.group({
-      address: ['']
+    this.addWebsite = { address: "" };
+    this.addWebsiteForm = new FormGroup({
+      newUrl: new FormControl(this.addWebsite.address, [
+        Validators.required,
+        Validators.minLength(1)
+      ])
     });
+
     this.showWebsites();
   }
 
@@ -46,15 +60,19 @@ export class WebsiteComponent implements OnInit {
       });
   }
 
-  addWebsites() {
-    const add = { addresses: [this.controls().address.value] };
+  insertWebsite() {
     this.apiService
-      .addWebsites(add)
-      .subscribe(websites => {
-        this.websites.push(websites[0]);
-        this.setWebsitesIntoTable();
-        this.controls().address.reset();
-      });
+      .insertWebsite(this.addWebsite)
+      .pipe()
+      .subscribe(
+        website => {
+          this.websites.push(website);
+          this.setWebsitesIntoTable();
+          this.addWebsiteForm.controls.newUrl.reset();
+        },
+        error => {
+          this.errorMessage = error.error;
+        });
   }
 
   deleteWebsite(id: number) {
@@ -66,22 +84,30 @@ export class WebsiteComponent implements OnInit {
       });
   }
 
-  checkWebsites() {
-    this.apiService
-      .checkWebsites()
-      .subscribe();
-  }
-
   setWebsitesIntoTable() {
     this.dataSource.data = this.websites
-  }
-
-  controls() {
-    return this.addWebsiteForm.controls;
   }
 
   removeWebsite(id: number) {
     const removeIndex = this.websites.findIndex(item => item.id === id);
     this.websites.splice(removeIndex, 1);
+  }
+
+  closeForm() {
+    this.errorMessage = '';
+    this.successAlert = '';
+  }
+
+  editWebsite(id: number, event: any) {
+    this.apiService
+      .updateWebsite(id, event.target.value)
+      .pipe()
+      .subscribe(
+        website => { 
+          this.successAlert = "Success update";
+        },
+        error => {
+          this.errorMessage = error.error;
+        });
   }
 }

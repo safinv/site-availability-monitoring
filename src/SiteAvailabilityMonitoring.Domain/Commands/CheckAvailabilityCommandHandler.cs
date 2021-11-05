@@ -39,7 +39,7 @@ namespace SiteAvailabilityMonitoring.Domain.Commands
             {
                 website.StatusCode = availability.StatusCode;
                 website.Available = availability.Available;
-                
+
                 await _websiteRepository.UpdateAsync(website, cancellationToken);
             }
         }

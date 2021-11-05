@@ -23,7 +23,7 @@ namespace SiteAvailabilityMonitoring.DataAccess.Implementations
         public async Task<DbWebsite> GetByIdAsync(long id, CancellationToken cancellationToken)
         {
             if (id == 0) return null;
-            
+
             await using var connection = _connectionFactory.CreateConnection();
             var query = @$"SELECT id, address, available, status_code FROM website WHERE id = {id}";
             var result = await connection.QueryFirstAsync<DbWebsite>(query, cancellationToken);
@@ -51,7 +51,7 @@ namespace SiteAvailabilityMonitoring.DataAccess.Implementations
                 dbWebsite,
                 commandType: CommandType.Text,
                 cancellationToken: cancellationToken);
-            
+
             var dbDataReader = await connection.ExecuteReaderAsync(commandDefinition);
             return dbDataReader.Parse<DbWebsite>().FirstOrDefault();
         }
@@ -59,7 +59,8 @@ namespace SiteAvailabilityMonitoring.DataAccess.Implementations
         public async Task UpdateAsync(DbWebsite dbWebsite, CancellationToken cancellationToken)
         {
             await using var connection = _connectionFactory.CreateConnection();
-            var query = @$"UPDATE website SET address = @Address, available = @Available, status_code = @StatusCode WHERE id = @Id";
+            var query =
+                @$"UPDATE website SET address = @Address, available = @Available, status_code = @StatusCode WHERE id = @Id";
 
             var commandDefinition = new CommandDefinition(
                 query,
@@ -82,6 +83,22 @@ namespace SiteAvailabilityMonitoring.DataAccess.Implementations
                 cancellationToken: cancellationToken);
 
             await connection.ExecuteAsync(commandDefinition);
+        }
+
+        public async Task<bool> AddressIsExist(string address, CancellationToken cancellationToken)
+        {
+            await using var connection = _connectionFactory.CreateConnection();
+            var query =
+                @$"SELECT id FROM website WHERE address = @address LIMIT 1";
+
+            var commandDefinition = new CommandDefinition(
+                query,
+                new {address},
+                commandType: CommandType.Text,
+                cancellationToken: cancellationToken);
+
+            var dbDataReader = await connection.QueryFirstOrDefaultAsync<long>(commandDefinition);
+            return dbDataReader != 0;
         }
     }
 }

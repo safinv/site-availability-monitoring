@@ -11,14 +11,14 @@ namespace SiteAvailabilityMonitoring.Domain.Queries
         : IRequestHandler<GetWebsiteQuery, Website>
     {
         private readonly IWebsiteRepository _websiteRepository;
-        
+
         public GetWebsiteQueryHandler(IWebsiteRepository websiteRepository)
         {
             _websiteRepository = websiteRepository;
         }
 
         public async Task<Website> Handle(
-            GetWebsiteQuery query, 
+            GetWebsiteQuery query,
             CancellationToken cancellationToken)
         {
             var website = await _websiteRepository.GetByIdAsync(query.Id, cancellationToken);
