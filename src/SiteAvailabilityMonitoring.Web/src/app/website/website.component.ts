@@ -3,6 +3,11 @@ import { ApiService } from '../config/api.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from "@angular/material/table";
 
+export interface GetWebsitesResponse {
+  websites: Array<Website>
+  count: number
+}
+
 export interface Website {
   id: number
   address: string
@@ -54,8 +59,8 @@ export class WebsiteComponent implements OnInit {
 
   showWebsites() {
     this.apiService.getWebsites()
-      .subscribe((data: Array<Website>) => {
-        this.websites = data;
+      .subscribe((data: GetWebsitesResponse) => {
+        this.websites = data.websites;
         this.setWebsitesIntoTable();
       });
   }

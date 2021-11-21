@@ -5,7 +5,7 @@ using SiteAvailabilityMonitoring.Abstractions.Dto;
 namespace SiteAvailabilityMonitoring.Domain.Queries
 {
     public class GetWebsitesQuery
-        : IRequest<IReadOnlyCollection<Website>>
+        : IRequest<WebsiteList>
     {
         public int Limit { get; }
         public int Offset { get; }

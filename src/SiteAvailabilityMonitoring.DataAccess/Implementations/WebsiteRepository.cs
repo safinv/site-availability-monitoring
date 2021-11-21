@@ -31,9 +31,22 @@ namespace SiteAvailabilityMonitoring.DataAccess.Implementations
             return result;
         }
 
-        public async Task<IEnumerable<DbWebsite>> GetAsync(CancellationToken cancellationToken)
+        public async Task<IEnumerable<DbWebsite>> GetAllAsync(CancellationToken cancellationToken = default)
         {
             await using var connection = _connectionFactory.CreateConnection();
+            var query = @$"SELECT id, address, available, status_code FROM website";
+            var result = await connection.QueryAsync<DbWebsite>(query, cancellationToken);
+
+            return result;
+        }
+
+        public async Task<IEnumerable<DbWebsite>> GetAsync(
+            int limit,
+            int offset,
+            CancellationToken cancellationToken)
+        {
+            await using var connection = _connectionFactory.CreateConnection();
+            
             var query = @$"SELECT id, address, available, status_code FROM website";
             var result = await connection.QueryAsync<DbWebsite>(query, cancellationToken);
 
@@ -99,6 +112,15 @@ namespace SiteAvailabilityMonitoring.DataAccess.Implementations
 
             var dbDataReader = await connection.QueryFirstOrDefaultAsync<long>(commandDefinition);
             return dbDataReader != 0;
+        }
+
+        public async Task<int> GetCount(CancellationToken cancellationToken)
+        {
+            await using var connection = _connectionFactory.CreateConnection();
+            var query = @$"SELECT COUNT(1) FROM website";
+            var result = await connection.QueryFirstAsync<int>(query, cancellationToken);
+
+            return result;
         }
     }
 }

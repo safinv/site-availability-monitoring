@@ -26,7 +26,7 @@ namespace SiteAvailabilityMonitoring.Api.Controllers
         /// </summary>
         /// <returns><see cref="Website"/></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(IReadOnlyCollection<Website>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IReadOnlyCollection<WebsiteList>), StatusCodes.Status200OK)]
         public async Task<IActionResult> Get(int limit = 10, int offset = 0)
         {
             var command = new GetWebsitesQuery(limit, offset);

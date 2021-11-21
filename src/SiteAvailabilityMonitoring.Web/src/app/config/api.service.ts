@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable, pipe, throwError } from 'rxjs';
 import { catchError, observeOn, retry, tap } from 'rxjs/operators';
-import { Website } from '../website/website.component';
+import { Website, GetWebsitesResponse } from '../website/website.component';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +15,7 @@ export class ApiService {
 
   getWebsites() {
     const url = `${this.baseUrl}/api/website`;
-    return this.http.get<Array<Website>>(url);
+    return this.http.get<GetWebsitesResponse>(url);
   }
 
   insertWebsite(address: any): Observable<Website> {

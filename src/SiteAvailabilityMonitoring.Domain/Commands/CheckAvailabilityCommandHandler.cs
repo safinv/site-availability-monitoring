@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using SiteAvailabilityMonitoring.Domain.DataAccessPoint;
 using SiteAvailabilityMonitoring.Domain.Entities;
 
@@ -12,23 +13,37 @@ namespace SiteAvailabilityMonitoring.Domain.Commands
     {
         private readonly IWebsiteRepository _websiteRepository;
         private readonly CheckWebsiteAvailabilityClient _checkWebsiteAvailabilityClient;
+        private readonly ILogger<CheckAvailabilityCommandHandler> _logger;
 
         public CheckAvailabilityCommandHandler(
             IWebsiteRepository websiteRepository,
-            CheckWebsiteAvailabilityClient checkWebsiteAvailabilityClient)
+            CheckWebsiteAvailabilityClient checkWebsiteAvailabilityClient, 
+            ILogger<CheckAvailabilityCommandHandler> logger)
         {
             _websiteRepository = websiteRepository;
             _checkWebsiteAvailabilityClient = checkWebsiteAvailabilityClient;
+            _logger = logger;
         }
 
         public async Task<Unit> Handle(CheckAvailabilityCommand request, CancellationToken cancellationToken)
         {
-            var websites = await _websiteRepository.GetAsync(cancellationToken);
-            var tasks = websites
-                .Select(ws => UpdateStatus(ws, cancellationToken))
-                .ToList();
+            var affectedCount = 0;
+            var count = await _websiteRepository.GetCount(cancellationToken);
 
-            await Task.WhenAll(tasks);
+            while (affectedCount < count)
+            {
+                var websites = (await _websiteRepository
+                    .GetAsync(cancellationToken: cancellationToken)).ToList();
+                
+                var tasks = websites
+                    .Select(ws => UpdateStatus(ws, cancellationToken))
+                    .ToList();
+                await Task.WhenAll(tasks);
+                affectedCount += affectedCount + websites.Count;
+                
+                _logger.LogInformation($"Affected websites: {affectedCount}.");
+            }
+
             return Unit.Value;
         }
 

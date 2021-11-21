@@ -10,7 +10,7 @@ using SiteAvailabilityMonitoring.Domain.DataAccessPoint;
 namespace SiteAvailabilityMonitoring.Domain.Queries
 {
     public class GetWebsitesQueryHandler
-        : IRequestHandler<GetWebsitesQuery, IReadOnlyCollection<Website>>
+        : IRequestHandler<GetWebsitesQuery, WebsiteList>
     {
         private readonly IWebsiteRepository _websiteRepository;
 
@@ -19,12 +19,24 @@ namespace SiteAvailabilityMonitoring.Domain.Queries
             _websiteRepository = websiteRepository;
         }
 
-        public async Task<IReadOnlyCollection<Website>> Handle(
+        public async Task<WebsiteList> Handle(
             GetWebsitesQuery request,
             CancellationToken cancellationToken)
         {
-            var websites = await _websiteRepository.GetAsync(cancellationToken);
-            return websites.OrderBy(x => x.Id).Adapt<IReadOnlyCollection<Website>>();
+            var websites = await _websiteRepository
+                .GetAsync(request.Limit, request.Offset, cancellationToken);
+
+            var count = await _websiteRepository.GetCount(cancellationToken);
+
+            var websitesDto = websites
+                .OrderBy(x => x.Id)
+                .Adapt<IReadOnlyCollection<Website>>();
+
+            return new WebsiteList
+            {
+                Websites = websitesDto,
+                Count = count
+            };
         }
     }
 }
