@@ -1,9 +1,8 @@
 ﻿using MediatR;
 
-namespace SiteAvailabilityMonitoring.Domain.Commands
+namespace SiteAvailabilityMonitoring.Domain.Commands;
+
+public class CheckAvailabilityCommand
+    : IRequest
 {
-    public class CheckAvailabilityCommand
-        : IRequest<Unit>
-    {
-    }
 }

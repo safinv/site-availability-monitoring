@@ -1,20 +1,19 @@
 ﻿using System.Data.Common;
 using Npgsql;
 
-namespace SiteAvailabilityMonitoring.DataAccess.Base
+namespace SiteAvailabilityMonitoring.DataAccess.Base;
+
+internal class ConnectionFactory : IConnectionFactory
 {
-    internal class ConnectionFactory : IConnectionFactory
+    private readonly string _connectionString;
+
+    public ConnectionFactory(string connectionString)
     {
-        private readonly string _connectionString;
+        _connectionString = connectionString;
+    }
 
-        public ConnectionFactory(string connectionString)
-        {
-            _connectionString = connectionString;
-        }
-
-        public DbConnection CreateConnection()
-        {
-            return new NpgsqlConnection(_connectionString);
-        }
+    public DbConnection CreateConnection()
+    {
+        return new NpgsqlConnection(_connectionString);
     }
 }

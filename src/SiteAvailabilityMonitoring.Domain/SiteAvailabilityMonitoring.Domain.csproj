@@ -1,23 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net5.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SiteAvailabilityMonitoring.Abstractions\SiteAvailabilityMonitoring.Abstractions.csproj" />
+        <ProjectReference Include="..\SiteAvailabilityMonitoring.Abstractions\SiteAvailabilityMonitoring.Abstractions.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Mapster" Version="7.2.0" />
-      <PackageReference Include="MediatR" Version="9.0.0" />
-      <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=5.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
-        <HintPath>C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App\5.0.0-rc.2.20475.17\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
-      </Reference>
+        <PackageReference Include="Mapster" Version="7.3.0"/>
+        <PackageReference Include="MediatR" Version="12.1.1"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="7.0.1"/>
     </ItemGroup>
 
 </Project>

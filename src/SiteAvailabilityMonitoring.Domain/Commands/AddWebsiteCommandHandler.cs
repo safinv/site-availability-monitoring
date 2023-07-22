@@ -6,39 +6,38 @@ using SiteAvailabilityMonitoring.Abstractions.Dto;
 using SiteAvailabilityMonitoring.Domain.DataAccessPoint;
 using SiteAvailabilityMonitoring.Domain.Entities;
 
-namespace SiteAvailabilityMonitoring.Domain.Commands
+namespace SiteAvailabilityMonitoring.Domain.Commands;
+
+public class AddWebsiteCommandHandler
+    : IRequestHandler<AddWebsiteCommand, Website>
 {
-    public class AddWebsiteCommandHandler
-        : IRequestHandler<AddWebsiteCommand, Website>
+    private readonly CheckWebsiteAvailabilityClient _checkWebsiteAvailabilityClient;
+    private readonly IWebsiteRepository _websiteRepository;
+
+    public AddWebsiteCommandHandler(IWebsiteRepository websiteRepository,
+        CheckWebsiteAvailabilityClient checkWebsiteAvailabilityClient)
     {
-        private readonly IWebsiteRepository _websiteRepository;
-        private readonly CheckWebsiteAvailabilityClient _checkWebsiteAvailabilityClient;
+        _websiteRepository = websiteRepository;
+        _checkWebsiteAvailabilityClient = checkWebsiteAvailabilityClient;
+    }
 
-        public AddWebsiteCommandHandler(IWebsiteRepository websiteRepository,
-            CheckWebsiteAvailabilityClient checkWebsiteAvailabilityClient)
+    public async Task<Website> Handle(AddWebsiteCommand command, CancellationToken cancellationToken)
+    {
+        var clearAddress = command.Address.TrimEnd('/');
+
+        var addressIsExist = await _websiteRepository.AddressIsExist(clearAddress, cancellationToken);
+        if (addressIsExist) return null;
+
+        var availability = await _checkWebsiteAvailabilityClient.CheckAsync(clearAddress);
+        var website = new DbWebsite
         {
-            _websiteRepository = websiteRepository;
-            _checkWebsiteAvailabilityClient = checkWebsiteAvailabilityClient;
-        }
+            Address = clearAddress,
+            StatusCode = availability.StatusCode,
+            Available = availability.Available
+        };
 
-        public async Task<Website> Handle(AddWebsiteCommand command, CancellationToken cancellationToken)
-        {
-            var clearAddress = command.Address.TrimEnd('/');
-            
-            var addressIsExist = await _websiteRepository.AddressIsExist(clearAddress, cancellationToken);
-            if (addressIsExist) return null;
+        var dbWebsite = await _websiteRepository.CreateAsync(website, cancellationToken);
 
-            var availability = await _checkWebsiteAvailabilityClient.CheckAsync(clearAddress);
-            var website = new DbWebsite
-            {
-                Address = clearAddress,
-                StatusCode = availability.StatusCode,
-                Available = availability.Available
-            };
-
-            var dbWebsite = await _websiteRepository.CreateAsync(website, cancellationToken);
-
-            return dbWebsite.Adapt<Website>();
-        }
+        return dbWebsite.Adapt<Website>();
     }
 }

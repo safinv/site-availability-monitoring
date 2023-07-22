@@ -3,28 +3,27 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using SiteAvailabilityMonitoring.Domain.Models;
 
-namespace SiteAvailabilityMonitoring.Domain
+namespace SiteAvailabilityMonitoring.Domain;
+
+public class CheckWebsiteAvailabilityClient
 {
-    public class CheckWebsiteAvailabilityClient
+    private readonly HttpClient _httpClient;
+
+    public CheckWebsiteAvailabilityClient(HttpClient httpClient)
     {
-        private readonly HttpClient _httpClient;
+        _httpClient = httpClient;
+    }
 
-        public CheckWebsiteAvailabilityClient(HttpClient httpClient)
+    public async Task<WebsiteAvailability> CheckAsync(string address)
+    {
+        try
         {
-            _httpClient = httpClient;
+            var result = await _httpClient.GetAsync(address);
+            return WebsiteAvailability.Ok(result);
         }
-
-        public async Task<WebsiteAvailability> CheckAsync(string address)
+        catch (Exception)
         {
-            try
-            {
-                var result = await _httpClient.GetAsync(address);
-                return WebsiteAvailability.Ok(result);
-            }
-            catch (Exception)
-            {
-                return WebsiteAvailability.Error();
-            }
+            return WebsiteAvailability.Error();
         }
     }
 }

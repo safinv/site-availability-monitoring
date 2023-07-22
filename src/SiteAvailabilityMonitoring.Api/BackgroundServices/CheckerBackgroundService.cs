@@ -7,38 +7,37 @@ using Microsoft.Extensions.Options;
 using SiteAvailabilityMonitoring.Api.Options;
 using SiteAvailabilityMonitoring.Domain.Commands;
 
-namespace SiteAvailabilityMonitoring.Api.BackgroundServices
+namespace SiteAvailabilityMonitoring.Api.BackgroundServices;
+
+public class CheckerBackgroundService : BackgroundService
 {
-    public class CheckerBackgroundService : BackgroundService
+    private readonly IServiceScopeFactory _scopeFactory;
+
+    public CheckerBackgroundService(IServiceScopeFactory scopeFactory)
     {
-        private readonly IServiceScopeFactory _scopeFactory;
+        _scopeFactory = scopeFactory;
+    }
 
-        public CheckerBackgroundService(IServiceScopeFactory scopeFactory)
+    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        return Task.Factory.StartNew(CheckWebsitesTaskAsync, (_scopeFactory, stoppingToken), stoppingToken,
+            TaskCreationOptions.LongRunning, TaskScheduler.Current);
+    }
+
+    private static async Task CheckWebsitesTaskAsync(object obj)
+    {
+        var (scopeFactory, stoppingToken) = ((IServiceScopeFactory, CancellationToken))obj;
+        using var scope = scopeFactory.CreateScope();
+
+        var mediatr = scope.ServiceProvider.GetRequiredService<IMediator>();
+        var options = scope.ServiceProvider.GetRequiredService<IOptions<CheckerOptions>>().Value;
+
+        while (!stoppingToken.IsCancellationRequested)
         {
-            _scopeFactory = scopeFactory;
-        }
+            var command = new CheckAvailabilityCommand();
+            await mediatr.Send(command);
 
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            return Task.Factory.StartNew(CheckWebsitesTaskAsync, (_scopeFactory, stoppingToken), stoppingToken,
-                TaskCreationOptions.LongRunning, TaskScheduler.Current);
-        }
-
-        private static async Task CheckWebsitesTaskAsync(object obj)
-        {
-            var (scopeFactory, stoppingToken) = ((IServiceScopeFactory, CancellationToken)) obj;
-            using var scope = scopeFactory.CreateScope();
-
-            var mediatr = scope.ServiceProvider.GetRequiredService<IMediator>();
-            var options = scope.ServiceProvider.GetRequiredService<IOptions<CheckerOptions>>().Value;
-
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                var command = new CheckAvailabilityCommand();
-                await mediatr.Send(command);
-
-                await Task.Delay(options.DelayTimeSpan, stoppingToken);
-            }
+            await Task.Delay(options.DelayTimeSpan, stoppingToken);
         }
     }
 }

@@ -5,29 +5,28 @@ using Microsoft.Extensions.DependencyInjection;
 using SiteAvailabilityMonitoring.DataAccess.Base;
 using SiteAvailabilityMonitoring.DataAccess.Migrations;
 
-namespace SiteAvailabilityMonitoring.DataAccess
+namespace SiteAvailabilityMonitoring.DataAccess;
+
+public static class ServiceCollectionExtensions
 {
-    public static class ServiceCollectionExtensions
+    public static IServiceCollection ConfigureDatabase(this IServiceCollection services,
+        IConfiguration configuration)
     {
-        public static IServiceCollection ConfigureDatabase(this IServiceCollection services,
-            IConfiguration configuration)
-        {
-            DefaultTypeMap.MatchNamesWithUnderscores = true;
+        DefaultTypeMap.MatchNamesWithUnderscores = true;
 
-            var connectionString = configuration.GetConnectionString("NpgsqlDatabase");
-            services.AddSingleton<IConnectionFactory>(
-                new ConnectionFactory(connectionString));
+        var connectionString = configuration.GetConnectionString("NpgsqlDatabase");
+        services.AddSingleton<IConnectionFactory>(
+            new ConnectionFactory(connectionString));
 
-            services.AddFluentMigratorCore()
-                .ConfigureRunner(builder =>
-                {
-                    builder.AddPostgres();
-                    builder.WithGlobalConnectionString(connectionString);
-                    builder.ScanIn(typeof(InitMigration).Assembly).For.Migrations();
-                })
-                .AddLogging(builder => builder.AddFluentMigratorConsole());
+        services.AddFluentMigratorCore()
+            .ConfigureRunner(builder =>
+            {
+                builder.AddPostgres();
+                builder.WithGlobalConnectionString(connectionString);
+                builder.ScanIn(typeof(InitMigration).Assembly).For.Migrations();
+            })
+            .AddLogging(builder => builder.AddFluentMigratorConsole());
 
-            return services;
-        }
+        return services;
     }
 }

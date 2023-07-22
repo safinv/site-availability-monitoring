@@ -1,6 +1,5 @@
-﻿namespace SiteAvailabilityMonitoring.Domain.Entities
+﻿namespace SiteAvailabilityMonitoring.Domain.Entities;
+
+public class Entity
 {
-    public class Entity
-    {
-    }
 }

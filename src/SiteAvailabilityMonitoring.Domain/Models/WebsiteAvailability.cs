@@ -1,28 +1,27 @@
 ﻿using System.Net.Http;
 
-namespace SiteAvailabilityMonitoring.Domain.Models
+namespace SiteAvailabilityMonitoring.Domain.Models;
+
+public struct WebsiteAvailability
 {
-    public struct WebsiteAvailability
+    public bool Available { get; private set; }
+    public int StatusCode { get; private set; }
+
+    public static WebsiteAvailability Ok(HttpResponseMessage result)
     {
-        public bool Available { get; private set; }
-        public int StatusCode { get; private set; }
-
-        public static WebsiteAvailability Ok(HttpResponseMessage result)
+        return new WebsiteAvailability
         {
-            return new()
-            {
-                Available = result.IsSuccessStatusCode,
-                StatusCode = (int) result.StatusCode
-            };
-        }
+            Available = result.IsSuccessStatusCode,
+            StatusCode = (int)result.StatusCode
+        };
+    }
 
-        public static WebsiteAvailability Error()
+    public static WebsiteAvailability Error()
+    {
+        return new WebsiteAvailability
         {
-            return new()
-            {
-                Available = false,
-                StatusCode = 0
-            };
-        }
+            Available = false,
+            StatusCode = 0
+        };
     }
 }

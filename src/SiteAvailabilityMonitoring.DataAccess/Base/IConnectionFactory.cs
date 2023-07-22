@@ -1,9 +1,8 @@
 ﻿using System.Data.Common;
 
-namespace SiteAvailabilityMonitoring.DataAccess.Base
+namespace SiteAvailabilityMonitoring.DataAccess.Base;
+
+public interface IConnectionFactory
 {
-    public interface IConnectionFactory
-    {
-        DbConnection CreateConnection();
-    }
+    DbConnection CreateConnection();
 }
