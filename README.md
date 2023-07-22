@@ -4,5 +4,5 @@ Interview project.
 
 Here are used:
 
-- Back-end: Net5.0, Postgres, Dapper
+- Back-end: Net7.0, Postgres, Dapper
 - Front-end: Angular
