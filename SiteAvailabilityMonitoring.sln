@@ -22,6 +22,11 @@ ProjectSection(SolutionItems) = preProject
 	scripts\up-postgres.sh = scripts\up-postgres.sh
 EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "common", "common", "{3B218386-B5A7-4CC8-A09F-F05717499D4B}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
